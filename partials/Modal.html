@@ -1,0 +1,53 @@
+<style>
+    .cropArea {
+        background: #E4E4E4;
+        overflow: hidden;
+        width: 640px;
+        height: 360px;
+    }
+</style>
+<div class="modal-content">
+    <div class="modal-header">
+        <h5 class="modal-title">{{action}} your keycap</h5>
+    </div>
+    <div class="modal-body">
+        <form>
+            <div class="mb-3">
+                <label for="name" class="form-label">Name</label>
+                <input type="text" class="form-control" id="name" ng-model="keycap.name" aria-describedby="emailHelp">
+            </div>
+            <div class="mb-3">
+                <label for="fileUrl" class="form-label">Link</label>
+                <input type="text" ng-model="myImage" class="form-control" id="fileUrl" aria-describedby="emailHelp">
+            </div>
+            <div class="mb-3">
+                <label for="fileInput" class="form-label">Link</label>
+                <input type="file" class="form-control" id="fileInput" aria-describedby="emailHelp">
+            </div>
+            <div class="mb-3">
+                <!-- <button ng-click="callTestFuntion()">Render</button> -->
+                <div class="cropArea">
+                    <ui-cropper 
+                        image="myImage" 
+                        area-type="square"
+                        result-image="myCroppedImage" 
+                        result-image-size='{w: 360,h: 360}' 
+                        init-max-area="true"
+                        >
+                    </ui-cropper>
+                  </div>
+            </div>
+            <div class="mb-3">
+                <div class="reviewArea">
+                    <img ng-src="{{myCroppedImage}}">
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-primary" ng-if="action == 'create'" ng-click="create(keycap)">Create</button>
+        <button class="btn btn-primary" ng-if="action == 'edit'" ng-click="save(keycap)">Save</button>
+        <button class="btn btn-default" ng-click="cancel()">Cancel</button>
+    </div>
+</div>
+
