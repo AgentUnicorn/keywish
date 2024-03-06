@@ -44,6 +44,25 @@ wishlist.controller("WishlistController", function($scope, $uibModal, WishlistSe
         });
     }
 
+    $scope.openExportModal = function()
+    {
+        const modalInstance = $uibModal.open({
+            templateUrl: 'partials/ExportModal.html', // Path to your modal content template
+            controller: 'ExportModalController', // Controller for the modal instance
+            size: 'lg', // Optional size (e.g., 'sm', 'lg')
+            windowClass: 'show',
+            resolve: {
+                wishlist: () => $scope.sections
+            }
+        });
+
+        modalInstance.result.then(function(result) {
+            // Handle modal close (optional)
+        }, function() {
+            // Handle modal dismiss (optional)
+        });
+    }
+
     $scope.editTitle = function(section) {
         section.editedTitle = angular.copy(section.title);
         $scope.editing = true;
@@ -78,22 +97,5 @@ wishlist.controller("WishlistController", function($scope, $uibModal, WishlistSe
             $scope.sections[2] = section
             localStorage.setItem('sections', JSON.stringify($scope.sections));
         }, 500); // Adjust the delay (in milliseconds) as needed
-    };
-
-    $scope.exportToPNG = function() {
-        var template = document.getElementById('export-template').innerHTML;
-        var canvas = document.createElement('canvas');
-        var ctx = canvas.getContext('2d');
-
-        // Render HTML content to canvas
-        html2canvas(document.getElementById('export-container'), {
-            onrendered: function(canvas) {
-                var imgData = canvas.toDataURL('image/png');
-                var link = document.createElement('a');
-                link.download = 'exported-data.png';
-                link.href = imgData;
-                link.click();
-            }
-        });
     };
 });

@@ -1,0 +1,43 @@
+<style>
+    .cropArea {
+        background: #E4E4E4;
+        overflow: hidden;
+        width: 640px;
+        height: 360px;
+    }
+</style>
+<div class="modal-content">
+    <div class="modal-header">
+        <h5 class="modal-title">HELLO your keycap</h5>
+    </div>
+    <div class="modal-body">
+        <div>
+            <button ng-click="exportToPNG()" class="btn btn-primary mx-2">Export</button>
+            <button ng-click="previewImage()" class="btn btn-primary mx-2"><i class="bi bi-plus-cicle-fill"></i>Preview</button>
+            <div id="previewImage"></div> 
+            <div id="export-container" style="border: solid red;">
+                <div id="export-template">
+                    <ng-include src="'partials/ExportTemplate.html'"></ng-include>
+                </div>
+            </div>  
+        </div>
+        <!-- <form>
+            <div class="mb-3">
+                <label for="name" class="form-label">Name</label>
+                <input type="text" class="form-control" id="name" ng-model="keycap.name" aria-describedby="emailHelp">
+            </div>
+            <div class="mb-3">
+                <label for="fileUrl" class="form-label">Link</label>
+                <input type="text" ng-model="myImage" class="form-control" id="fileUrl" aria-describedby="emailHelp">
+            </div>
+            <div class="mb-3">
+                <label for="fileInput" class="form-label">Link</label>
+                <input type="file" class="form-control" id="fileInput" aria-describedby="emailHelp">
+            </div>
+        </form> -->
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-default" ng-click="cancel()">Cancel</button>
+    </div>
+</div>
+
