@@ -80,10 +80,16 @@ wishlist.controller("WishlistController", function($scope, $uibModal, WishlistSe
         }, 500); // Adjust the delay (in milliseconds) as needed
     };
 
+    $scope.preview = function (param) 
+    {  
+
+    }
+
     $scope.exportToPNG = function() {
-        var template = document.getElementById('export-template').innerHTML;
-        var canvas = document.createElement('canvas');
-        var ctx = canvas.getContext('2d');
+        let template = document.getElementById('export-template').innerHTML;
+        // console.log(template)
+        let canvas = document.createElement('canvas');
+        let ctx = canvas.getContext('2d');
 
         // Render HTML content to canvas
         html2canvas(document.getElementById('export-container'), {
@@ -95,5 +101,28 @@ wishlist.controller("WishlistController", function($scope, $uibModal, WishlistSe
                 link.click();
             }
         });
+    };
+
+    $scope.element = angular.element(document.getElementById('export-template'));
+    $scope.getCanvas = null;
+
+    $scope.previewImage = function() {
+        console.log(document.getElementById('export-template'))
+        html2canvas($scope.element, {
+            onrendered: function(canvas) {
+                angular.element(document.getElementById('previewImage')).append(canvas);
+                $scope.getCanvas = canvas;
+            }
+        });
+    };
+
+    $scope.convertHtmlToImage = function() {
+        if ($scope.getCanvas) {
+            var imgageData = $scope.getCanvas.toDataURL("image/png");
+            var newData = imgageData.replace(/^data:image\/png/, "data:application/octet-stream");
+
+            var downloadLink = angular.element(document.getElementById('btn-Convert-Html2Image'));
+            downloadLink.attr("download", "GeeksForGeeks.png").attr("href", newData);
+        }
     };
 });
