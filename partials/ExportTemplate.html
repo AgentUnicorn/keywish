@@ -4,7 +4,73 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Data Export</title>
 </head>
+<style>
+    .section {
+        margin-bottom: 20px;
+    }
+    .section-title {
+        width: 100%;
+        position: relative;
+        padding-bottom: 10px;
+    }
+    .section-title:after {
+        content: "";
+        position: absolute;
+        left: 0;
+        bottom: 0;
+        width: 100%;
+        border-bottom: 1px solid #ccc;
+    }
+    .add-button {
+        position: absolute;
+        right: 0;
+        bottom: 0;
+        padding-left: 10px;
+        padding-right: 10px;
+        cursor: pointer;
+    }
+    .section-content {
+        display: none;
+        padding-top: 10px;
+    }
+    .section-content.active {
+        display: block;
+    }
+    .container {
+        max-width: 80%;
+    }
+
+</style>
 <body>
-    <h1>Cac</h1>
+    <div class="container">    
+            <div class="row" >
+
+                <div class="col-md-12">
+                    <div class="section" ng-repeat="section in wishlist track by $index">
+                        <div class="section-title d-flex align-items-center">
+                            <h3 style="cursor: pointer;">{{section.title}}</h3>
+                        </div>
+                        <div class="section-content active" id="content1">
+                            <div class="row" ng-if="section.type == 'array'">
+                                <div ng-repeat="keycap in section.data track by $index" class="col-md-3 mb-3">
+                                    <div class="card" style="height: 100%; display: flex; flex-direction: column;">
+                                        <img ng-src="{{keycap.img_url}}" class="card-img-top" alt="Placeholder Image">
+                                        <div class="card-body">
+                                            <h5 class="card-title">{{keycap.name}}</h5>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div ng-if="section.type == 'text'">
+                                    <p>{{section.data}}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+    </div>
+    
+    
+    
 </body>
 </html>
