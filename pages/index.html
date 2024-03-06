@@ -37,63 +37,46 @@
 </style>
 
 <div class="container">
-    <div class="row">
-        <div class="col-md-12">
-            <div class="section">
-                <div class="section-title">
-                    <h3 ng-click="showContent(1)" style="cursor: pointer;">Nhà mong tin</h3>
-                    <button ng-click="openNewModal(1)" class="add-button btn btn-success"><i class="bi bi-plus-cicle-fill"></i>Add</button>
+    <div>
+        <div class="row" >
+            <div class="col-md-12 mb-4">
+                <button ng-click="exportToPNG()" class="btn btn-primary mx-2"><i class="bi bi-plus-cicle-fill"></i>Export</button>
+                <div id="export-template" style="display: none;">
+                    <ng-include src="'partials/ExportTemplate.html'"></ng-include>
                 </div>
-                <div class="section-content" ng-class="{active: sections[1] == true}" id="content1">
-                    <div class="row">
-                        <div ng-repeat="keycap in data[1] track by $index" class="col-md-3 mb-3">
-                            <div class="card" style="height: 100%; display: flex; flex-direction: column;">
-                                <img ng-src="{{keycap.img_url}}" class="card-img-top" alt="Placeholder Image">
-                                <button ng-click="removeKeycap(1, keycap.id)" class="btn btn-outline-danger" style="position: absolute; top: 5px; right: 5px;">X</button>
-                                <div class="card-body">
-                                    <h5 class="card-title">{{keycap.name}}</h5>
+            </div>
+
+            <div class="col-md-12">
+                <div class="section" ng-repeat="section in sections track by $index">
+                    <div class="section-title d-flex align-items-center">
+                        <!-- <h3 style="cursor: pointer;">{{section.title}}</h3> -->
+                        <h3 style="cursor: pointer;" ng-click="editTitle(section)" ng-hide="editing">{{section.title}}</h3>
+                        <button ng-click="openNewModal(section.id)" class="add-button btn btn-success mx-2"><i class="bi bi-plus-cicle-fill"></i>Add</button>
+
+                        <input type="text" style="width: 50%;" ng-model="section.editedTitle" ng-show="editing">
+                        <button ng-click="toggleEditing()" class="edit-button btn btn-primary mr-3" ng-hide="editing"><i class="bi bi-pencil-fill"></i></button>
+                        <button ng-click="saveTitle(section)" class="save-button btn btn-success mr-3" ng-show="editing"><i class="bi bi-check2"></i></button>
+                        <button ng-click="cancelEditing()" class="cancel-button btn btn-danger mr-3" ng-show="editing"><i class="bi bi-x"></i></button>
+                    </div>
+                    <div class="section-content active" id="content1">
+                        <div class="row" ng-if="section.type == 'array'">
+                            <div ng-repeat="keycap in section.data track by $index" class="col-md-3 mb-3">
+                                <div class="card" style="height: 100%; display: flex; flex-direction: column;">
+                                    <img ng-src="{{keycap.img_url}}" class="card-img-top" alt="Placeholder Image">
+                                    <button ng-click="removeKeycap(section.id, keycap.id)" class="btn btn-outline-danger" style="position: absolute; top: 5px; right: 5px;">X</button>
+                                    <div class="card-body">
+                                        <h5 class="card-title">{{keycap.name}}</h5>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-md-12">
-            <div class="section">
-                <div class="section-title">
-                    <h3 ng-click="showContent(2)" style="cursor: pointer;">Nhà sẽ gả</h3>
-                    <button ng-click="openNewModal(2)" class="add-button btn btn-success"><i class="bi bi-plus-cicle-fill"></i>Add</button>
-                </div>
-                <div class="section-content" ng-class="{active: sections[2] == true}" id="content2">
-                    <div class="row">
-                        <div ng-repeat="keycap in data[2] track by $index" class="col-md-3 mb-3">
-                            <div class="card" style="height: 100%; display: flex; flex-direction: column;">
-                                <img ng-src="{{keycap.img_url}}" class="card-img-top" alt="Placeholder Image">
-                                <button ng-click="removeKeycap(2, keycap.id)" class="btn btn-outline-danger" style="position: absolute; top: 5px; right: 5px;">X</button>
-                                <div class="card-body">
-                                    <h5 class="card-title">{{keycap.name}}</h5>
-                                </div>
+                        <div ng-if="section.type == 'text'">
+                            <div class="form-floating">
+                                <textarea class="form-control" ng-model="section.data" ng-change="lazyInputChange(section)" placeholder="Leave a comment here" id="floatingTextarea"></textarea>
+                                <label for="floatingTextarea">Your note</label>
                             </div>
                         </div>
                     </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-md-12">
-            <div class="section">
-                <div class="section-title">
-                    <h3 ng-click="showContent(3)" style="cursor: pointer;">Extra (WIP)</h3>
-                    <button class="add-button btn btn-success"><i class="bi bi-plus-cicle-fill"></i>Add</button>
-                </div>
-                <div class="section-content" ng-class="{active: sections[3] == true}" id="content3">
-                    <!-- <div ng-repeat="keycap in data[3]" class="row">
-                        <div class="col-xs-6">{{keycap.name}}</div>
-                    </div> -->
                 </div>
             </div>
         </div>

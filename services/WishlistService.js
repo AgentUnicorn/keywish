@@ -1,14 +1,29 @@
 app.service('WishlistService', function(HelperService, $http) {
     // Service logic
-    this.getAllWishlist = function () 
-    {
-        let wishlist = JSON.parse(localStorage.getItem('wishlist'));
-        if (wishlist) return wishlist
-        return {
-            1: [],
-            2: [],
-            3: []
-        }
+    this.getAllSection = function () 
+    {  
+        let sections = JSON.parse(localStorage.getItem('sections'));
+        if (sections) return sections
+        return [
+            {
+                title: "Section 1",
+                id: 1,
+                type: "array",
+                data: []
+            },
+            {
+                title: "Section 2",
+                id: 2,
+                type: "array",
+                data: []
+            },
+            {
+                title: "Section 3",
+                id: 3,
+                type: "text",
+                data: ""
+            },
+        ]
     }
 
     this.createKeycap = function (wishlist, section_id, keycap) 
@@ -25,20 +40,16 @@ app.service('WishlistService', function(HelperService, $http) {
             img_url: keycap.fileURL
         }
 
-        if (!wishlist) {
-            wishlist = this.getAllWishlist()
-        }
-        wishlist[section_id]?.push(new_keycap)
-        localStorage.setItem('wishlist', JSON.stringify(wishlist));
+        wishlist = this.pushKeycapIntoSectionData(wishlist, section_id, new_keycap)
+        localStorage.setItem('sections', JSON.stringify(wishlist));
         return wishlist
     }
 
     this.deleteKeycap = function (section_id, keycap_id) 
     {  
-        let wishlist = this.getAllWishlist()
-        let section_data = wishlist[section_id].filter((k) => k.id != keycap_id)
-        wishlist[section_id] = section_data
-        localStorage.setItem('wishlist', JSON.stringify(wishlist));
+        let wishlist = this.getAllSection()
+        wishlist = this.removeKeycapFromSectionData(wishlist, section_id, keycap_id)
+        localStorage.setItem('sections', JSON.stringify(wishlist));
         return wishlist
     }
 
@@ -92,4 +103,26 @@ app.service('WishlistService', function(HelperService, $http) {
         console.error("Image URL is not available.");
       }
     };
+
+    this.pushKeycapIntoSectionData = function (sections, section_id, keycap) {
+        var section = sections.find(s => s.id === section_id);
+        if (section) {
+            section.data.push(keycap);
+        } else {
+            console.error("Object with id " + section_id + " not found.");
+        }
+    
+        return sections;
+    }
+
+    this.removeKeycapFromSectionData = function (sections, section_id, keycap_id) {
+        var section = sections.find(s => s.id === section_id);
+        if (section) {
+            section.data = section.data.filter(kc => kc.id !== keycap_id);
+        } else {
+            console.error("Object with id " + section_id + " not found.");
+        }
+    
+        return sections;
+    }
 });
