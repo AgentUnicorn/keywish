@@ -40,10 +40,14 @@
     <div>
         <div class="row" >
             <div class="col-md-12 mb-4">
-                <button ng-click="exportToPNG()" class="btn btn-primary mx-2"><i class="bi bi-plus-cicle-fill"></i>Export</button>
-                <div id="export-template" style="display: none;">
-                    <ng-include src="'partials/ExportTemplate.html'"></ng-include>
-                </div>
+                <button ng-click="openExportModal()" class="btn btn-primary mx-2"><i class="bi bi-plus-cicle-fill"></i>Export</button>
+                <!-- <button ng-click="previewImage()" class="btn btn-primary mx-2"><i class="bi bi-plus-cicle-fill"></i>Preview</button> -->
+                <!-- <div id="previewImage"></div> 
+                <div id="export-container">
+                    <div id="export-template">
+                        <ng-include src="'partials/ExportTemplate.html'"></ng-include>
+                    </div>
+                </div>   -->
             </div>
 
             <div class="col-md-12">

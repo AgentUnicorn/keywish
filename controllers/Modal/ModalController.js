@@ -14,7 +14,7 @@ app.controller(
     $scope.section_id = section_id;
     $scope.action = action;
     $scope.keycap = keycap ?? {};
-    $scope.wishlist = wishlist ?? {}
+    $scope.wishlist = wishlist ?? {};
 
     // Live review
     // $scope.blockingObject = { block: true };
@@ -31,7 +31,7 @@ app.controller(
 
     let handleFileSelect = function (evt) {
       var file = evt.currentTarget.files[0];
-      console.log(file)
+      console.log(file);
       var reader = new FileReader();
       reader.onload = function (evt) {
         $scope.$apply(function ($scope) {
@@ -47,9 +47,13 @@ app.controller(
     });
 
     $scope.create = function () {
-      $scope.keycap.fileURL = $scope.myCroppedImage
-      $scope.wishlist = WishlistService.createKeycap($scope.wishlist, $scope.section_id, $scope.keycap);
-      $uibModalInstance.close($scope.wishlist)
+      $scope.keycap.fileURL = $scope.myCroppedImage;
+      $scope.wishlist = WishlistService.createKeycap(
+        $scope.wishlist,
+        $scope.section_id,
+        $scope.keycap
+      );
+      $uibModalInstance.close($scope.wishlist);
     };
 
     $scope.save = function () {
