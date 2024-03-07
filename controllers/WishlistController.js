@@ -65,11 +65,11 @@ wishlist.controller("WishlistController", function($scope, $uibModal, WishlistSe
 
     $scope.editTitle = function(section) {
         section.editedTitle = angular.copy(section.title);
-        $scope.editing = true;
+        section.editing = true;
     };
     
-    $scope.toggleEditing = function() {
-        $scope.editing = !$scope.editing;
+    $scope.toggleEditing = function(section) {
+        section.editing = !section.editing;
     };
     
     $scope.saveTitle = function(section) {
@@ -80,11 +80,11 @@ wishlist.controller("WishlistController", function($scope, $uibModal, WishlistSe
             $scope.sections[section_index] = section
             localStorage.setItem('sections', JSON.stringify($scope.sections));
         }
-        $scope.editing = false;
+        section.editing = false;
     };
     
-    $scope.cancelEditing = function() {
-        $scope.editing = false;
+    $scope.cancelEditing = function(section) {
+        section.editing = false;
     };
 
     $scope.lazyInputChange = function(section) {

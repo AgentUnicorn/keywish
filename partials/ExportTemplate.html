@@ -1,76 +1,60 @@
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Data Export</title>
 </head>
 <style>
-    .section {
-        margin-bottom: 20px;
+
+    /* .container {
+        max-width: 80%;
+    } */
+
+    div.item {
+        /* To correctly align image, regardless of content height: */
+        vertical-align: top;
+        display: inline-block;
+        /* To horizontally center images and caption */
+        text-align: center;
+        /* The width of the container also implies margin around the images. */
+        width: 120px;
     }
-    .section-title {
-        width: 100%;
-        position: relative;
-        padding-bottom: 10px;
+    .img-export {
+        width: 100px;
+        height: 100px;
+        background-color: grey;
     }
-    .section-title:after {
-        content: "";
-        position: absolute;
-        left: 0;
-        bottom: 0;
-        width: 100%;
-        border-bottom: 1px solid #ccc;
-    }
-    .add-button {
-        position: absolute;
-        right: 0;
-        bottom: 0;
-        padding-left: 10px;
-        padding-right: 10px;
-        cursor: pointer;
-    }
-    .section-content {
-        display: none;
-        padding-top: 10px;
-    }
-    .section-content.active {
+    .caption {
+        /* Make the caption a block so it occupies its own line. */
         display: block;
     }
-    .container {
-        max-width: 80%;
-    }
-
 </style>
-<body>
-    <div class="container">    
-            <div class="row" >
 
-                <div class="col-md-12">
-                    <div class="section" ng-repeat="section in wishlist track by $index">
-                        <div class="section-title d-flex align-items-center">
-                            <h3 style="cursor: pointer;">{{section.title}}</h3>
-                        </div>
-                        <div class="section-content active" id="content1">
-                            <div class="row" ng-if="section.type == 'array'">
-                                <div ng-repeat="keycap in section.data track by $index" class="col-md-3 mb-3">
-                                    <div class="card" style="height: 100%; display: flex; flex-direction: column;">
-                                        <img ng-src="{{keycap.img_url}}" class="card-img-top" alt="Placeholder Image">
-                                        <div class="card-body">
-                                            <h5 class="card-title">{{keycap.name}}</h5>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div ng-if="section.type == 'text'">
-                                    <p>{{section.data}}</p>
-                            </div>
-                        </div>
+<body>
+    <div class="container" style="background-color: #ffffff;">
+        <div ng-repeat="section in wishlist track by $index">
+            <div class="row">
+                <div class="col text-center">
+                    <h5>{{section.title}}</h5>
+                </div>
+            </div>
+            <div class="row" ng-if="section.type == 'array'">
+                <div class="col-md-3 mb-3" ng-repeat="keycap in section.data track by $index">
+                    <div class="item">
+                        <img class="img-export" ng-src="{{keycap.img_url}}"/>
+                        <span class="caption">{{keycap.name}}</span>
                     </div>
                 </div>
             </div>
+            <div class="row" ng-if="section.type == 'text'">
+                <div class="col">
+                    <p>{{section.data}}</p>
+                </div>
+            </div>
+        </div>
     </div>
     
-    
-    
 </body>
+
 </html>
