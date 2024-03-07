@@ -18,7 +18,7 @@ app.controller(
       // Render HTML content to canvas
       html2canvas(document.getElementById("export-container"), {
         onrendered: function (canvas) {
-          var imgData = canvas.toDataURL("image/png");
+          var imgData = canvas.toDataURL("image/jpg");
           var link = document.createElement("a");
           link.download = "exported-data.png";
           link.href = imgData;
