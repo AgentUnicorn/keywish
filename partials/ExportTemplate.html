@@ -32,29 +32,29 @@
 </style>
 
 <body>
-    <div class="container" style="background-color: #ffffff;">
+    <div class="container mx-auto p-4 bg-white">
         <div ng-repeat="section in wishlist track by $index">
-            <div class="row">
-                <div class="col text-center">
+            <div class="mb-4">
+                <div class="text-center">
                     <h5>{{section.title}}</h5>
                 </div>
             </div>
-            <div class="row" ng-if="section.type == 'array'">
-                <div class="col-md-3 mb-3" ng-repeat="keycap in section.data track by $index">
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                <div class="col mb-3 max-w-fit" ng-repeat="keycap in section.data track by $index">
                     <div class="item">
-                        <img class="img-export" ng-src="{{keycap.img_url}}"/>
-                        <span class="caption">{{keycap.name}}</span>
+                        <img class="w-full h-auto rounded-md mb-2" ng-src="{{keycap.img_url}}" alt="{{keycap.name}}"/>
+                        <span class="block text-center font-medium">{{keycap.name}}</span>
                     </div>
                 </div>
             </div>
-            <div class="row" ng-if="section.type == 'text'">
+            <div class="mb-4" ng-if="section.type == 'text'">
                 <div class="col">
                     <p>{{section.data}}</p>
                 </div>
             </div>
         </div>
     </div>
-    
 </body>
+
 
 </html>
