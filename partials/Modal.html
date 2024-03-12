@@ -2,52 +2,66 @@
     .cropArea {
         background: #E4E4E4;
         overflow: hidden;
-        width: 640px;
+        width: 704px;
         height: 360px;
     }
 </style>
-<div class="modal-content">
-    <div class="modal-header">
-        <h5 class="modal-title">{{action}} your keycap</h5>
-    </div>
-    <div class="modal-body">
-        <form>
-            <div class="mb-3">
-                <label for="name" class="form-label">Name</label>
-                <input type="text" class="form-control" id="name" ng-model="keycap.name" aria-describedby="emailHelp">
+<div class="fixed inset-0 z-50 overflow-auto bg-black bg-opacity-50 flex items-center justify-center">
+    <div class="bg-white w-full max-w-3xl p-8 rounded-lg shadow-md overflow-auto max-h-[90vh]" >
+        <div class="text-center">
+            <h5 class="text-2xl font-semibold">{{ action === 'create' ? 'Create' : 'Edit' }} your keycap</h5>
+        </div>
+        <form class="mt-4">
+            <div class="mb-4">
+                <label for="name" class="block text-sm font-medium text-gray-600">Name</label>
+                <input type="text" class="mt-1 p-2 w-full border rounded-md" id="name" ng-model="keycap.name" aria-describedby="nameHelp">
             </div>
-            <div class="mb-3">
-                <label for="fileUrl" class="form-label">Link</label>
-                <input type="text" ng-model="myImage" class="form-control" id="fileUrl" aria-describedby="emailHelp">
+            <div class="mb-4">
+                <label for="fileUrl" class="block text-sm font-medium text-gray-600">Image Link</label>
+                <input type="text" ng-model="myImage" class="mt-1 p-2 w-full border rounded-md" id="fileUrl" aria-describedby="fileUrlHelp">
             </div>
-            <div class="mb-3">
-                <label for="fileInput" class="form-label">Link</label>
-                <input type="file" class="form-control" id="fileInput" aria-describedby="emailHelp">
+            <div class="mb-4">
+                <label for="fileInput" class="block text-sm font-medium text-gray-600">Upload Image</label>
+                <input type="file" class="mt-1 p-2 w-full border rounded-md" id="fileInput" aria-describedby="fileInputHelp">
             </div>
-            <div class="mb-3">
-                <!-- <button ng-click="callTestFuntion()">Render</button> -->
+            <div class="mb-4">
                 <div class="cropArea">
                     <ui-cropper 
                         image="myImage" 
                         area-type="square"
                         result-image="myCroppedImage" 
-                        result-image-size='{w: 720,h: 720}' 
                         init-max-area="true"
-                        >
-                    </ui-cropper>
-                  </div>
+                    ></ui-cropper>
+                </div>
             </div>
-            <div class="mb-3">
-                <div class="reviewArea">
-                    <img ng-src="{{myCroppedImage}}">
+            <div class="mb-4">
+                <div class="flex items-center justify-center">
+                    <img ng-src="{{myCroppedImage}}" class="w-auto h-[200px] rounded-md">
                 </div>
             </div>
         </form>
-    </div>
-    <div class="modal-footer">
-        <button class="btn btn-primary" ng-if="action == 'create'" ng-click="create(keycap)">Create</button>
-        <button class="btn btn-primary" ng-if="action == 'edit'" ng-click="save(keycap)">Save</button>
-        <button class="btn btn-default" ng-click="cancel()">Cancel</button>
+        <div class="flex justify-end mt-6">
+            <button 
+                class="text-blue-700 hover:text-white border border-blue-700 hover:bg-blue-800 focus:ring-4 
+                focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center 
+                me-2 dark:border-blue-500 dark:text-blue-500 dark:hover:text-white dark:hover:bg-blue-500 
+                dark:focus:ring-blue-800"
+                ng-if="action === 'create'" 
+                ng-click="create(keycap)"
+            >
+                Create
+            </button>
+            <button class="btn-primary mr-2" ng-if="action === 'edit'" ng-click="save(keycap)">Save</button>
+            <button 
+                class="text-gray-900 hover:text-white border border-gray-800 hover:bg-gray-900 focus:ring-4 
+                focus:outline-none focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2
+                dark:border-gray-600 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-800" 
+                ng-click="cancel()"
+            >
+                Cancel
+            </button>
+        </div>
     </div>
 </div>
+
 

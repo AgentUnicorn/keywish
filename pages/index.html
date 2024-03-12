@@ -1,46 +1,29 @@
 <style>
-    .section {
-        margin-bottom: 20px;
-    }
-    .section-title {
-        width: 100%;
-        position: relative;
-        padding-bottom: 10px;
-    }
-    .section-title:after {
-        content: "";
-        position: absolute;
-        left: 0;
-        bottom: 0;
-        width: 100%;
-        border-bottom: 1px solid #ccc;
-    }
-    .add-button {
-        position: absolute;
-        right: 0;
-        bottom: 0;
-        padding-left: 10px;
-        padding-right: 10px;
-        cursor: pointer;
-    }
-    .section-content {
-        display: none;
-        padding-top: 10px;
-    }
-    .section-content.active {
-        display: block;
-    }
-    .container {
-        max-width: 80%;
-    }
-
 </style>
 
-<div class="container">
-    <div>
-        <div class="row" >
-            <div class="col-md-12 mb-4">
-                <button ng-click="openExportModal()" class="btn btn-primary mx-2"><i class="bi bi-plus-cicle-fill"></i>Export</button>
+<div class="h-[100vh] tracking-normal text-indigo-400 bg-cover bg-fixed" style="background-image: url('assets/header.png');">
+    <div class="h-full">
+        <!--Nav-->
+        <div class="w-full container mx-auto pt-5">
+            <div class="w-full flex items-center justify-between">
+                <a class="flex items-center text-indigo-400 no-underline hover:no-underline font-bold text-2xl lg:text-4xl" href="#">
+                    Key<span class="bg-clip-text text-transparent bg-gradient-to-r from-green-400 via-pink-500 to-purple-500">wish</span>
+                </a>
+            </div>
+        </div>
+
+        <!--Main-->
+        <div class="container pt-24 md:pt-36 mx-auto flex flex-col items-center">
+            <div class="">
+                <button 
+                    type="button" 
+                    class="text-gray-900 bg-gradient-to-r from-teal-200 to-lime-200 hover:bg-gradient-to-l 
+                    hover:from-teal-200 hover:to-lime-200 focus:ring-4 focus:outline-none focus:ring-lime-200 
+                    dark:focus:ring-teal-700 font-medium rounded-lg text-sm px-5 py-2.5 text-center m-2"
+                    ng-click="openExportModal()"
+                >
+                    Preview
+                </button>
                 <!-- <button ng-click="previewImage()" class="btn btn-primary mx-2"><i class="bi bi-plus-cicle-fill"></i>Preview</button> -->
                 <!-- <div id="previewImage"></div> 
                 <div id="export-container">
@@ -49,41 +32,111 @@
                     </div>
                 </div>   -->
             </div>
-
-            <div class="col-md-12">
-                <div class="section" ng-repeat="section in sections track by $index">
-                    <div class="section-title d-flex align-items-center">
+            <div class="w-full px-10">
+                <div class="section flex flex-col items-center w-full mb-5" ng-repeat="section in sections track by $index">
+                    <div class="flex w-full relative items-center">
                         <!-- <h3 style="cursor: pointer;">{{section.title}}</h3> -->
-                        <h3 style="cursor: pointer;" ng-click="editTitle(section)" ng-hide="editing">{{section.title}}</h3>
-                        <button ng-click="openNewModal(section.id)" class="add-button btn btn-success mx-2"><i class="bi bi-plus-cicle-fill"></i>Add</button>
-
-                        <input type="text" style="width: 50%;" ng-model="section.editedTitle" ng-show="editing">
-                        <button ng-click="toggleEditing()" class="edit-button btn btn-primary mr-3" ng-hide="editing"><i class="bi bi-pencil-fill"></i></button>
-                        <button ng-click="saveTitle(section)" class="save-button btn btn-success mr-3" ng-show="editing"><i class="bi bi-check2"></i></button>
-                        <button ng-click="cancelEditing()" class="cancel-button btn btn-danger mr-3" ng-show="editing"><i class="bi bi-x"></i></button>
+                        <h3
+                            class="flex cursor-pointer items-center justify-start me-6 w-[300px] text-2xl min-h-[42px]"
+                            ng-click="editTitle(section)" 
+                            ng-hide="section.editing"
+                        >
+                            {{section.title}}
+                        </h3>
+                        <button 
+                            type="button"
+                            class="flex items-center text-white bg-gradient-to-r from-cyan-500 to-blue-500 hover:bg-gradient-to-bl 
+                            focus:ring-4 focus:outline-none focus:ring-cyan-300 dark:focus:ring-cyan-800 
+                            font-medium rounded-lg text-sm px-4 py-2.5 text-center me-2 absolute right-0 bottom-0"
+                            ng-click="openNewModal(section.id)"
+                        >
+                            Add
+                        </button>
+                        
+                        <input 
+                            type="text" 
+                            class="max-w-[20%] bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg 
+                            focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 
+                            dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 
+                            dark:focus:border-blue-500"
+                            ng-model="section.editedTitle" 
+                            ng-show="section.editing"
+                        >
+                        <!-- <button 
+                            type="button" 
+                            class="h-[40px] text-white bg-gradient-to-r from-purple-500 to-pink-500 hover:bg-gradient-to-l 
+                            focus:ring-4 focus:outline-none focus:ring-purple-200 dark:focus:ring-purple-800 font-medium rounded-lg 
+                            text-sm px-5 py-2.5 text-center"
+                            ng-click="toggleEditing(section)"
+                            ng-hide="section.editing"
+                        >
+                            Edit
+                        </button> -->
+                        <button 
+                            type="button" 
+                            class="h-[40px] text-white bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 
+                            hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 
+                            dark:focus:ring-blue-800 shadow-lg shadow-blue-500/50 dark:shadow-lg dark:shadow-blue-800/80 font-medium rounded-lg 
+                            text-sm px-5 py-2.5 text-center ms-2"
+                            ng-click="saveTitle(section)"
+                            ng-show="section.editing"
+                        >
+                            Save
+                        </button>
+                        <button 
+                            type="button" 
+                            class="h-[40px] text-white bg-gradient-to-r from-red-400 via-red-500 to-red-600 
+                            hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-red-300 
+                            dark:focus:ring-red-800 shadow-lg shadow-red-500/50 dark:shadow-lg
+                            dark:shadow-red-800/80 font-medium rounded-lg text-sm px-5 py-2.5 text-center ms-2"
+                            ng-click="cancelEditing(section)"
+                            ng-show="section.editing"
+                        >
+                            Cancel
+                        </button>
                     </div>
-                    <div class="section-content active" id="content1">
-                        <div class="row" ng-if="section.type == 'array'">
-                            <div ng-repeat="keycap in section.data track by $index" class="col-md-3 mb-3">
-                                <div class="card" style="height: 100%; display: flex; flex-direction: column;">
-                                    <img ng-src="{{keycap.img_url}}" class="card-img-top" alt="Placeholder Image">
-                                    <button ng-click="removeKeycap(section.id, keycap.id)" class="btn btn-outline-danger" style="position: absolute; top: 5px; right: 5px;">X</button>
-                                    <div class="card-body">
-                                        <h5 class="card-title">{{keycap.name}}</h5>
+                    <div class="w-full" id="content1">
+                        <div class="grid grid-cols-2 md:grid-cols-7 gap-4 py-4 max-w-fit" ng-if="section.type == 'array'">
+                            <div ng-repeat="keycap in section.data track by $index" class="col-md-3 mb-3 max-w-fit">
+                                <div class="h-full flex flex-col max-w-fit">
+                                    <div class="relative max-w-fit">
+                                        <button 
+                                            class="absolute top-2 right-2 inline-flex items-center justify-center p-0.5 
+                                            overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br 
+                                            from-purple-500 to-pink-500 group-hover:from-purple-500 group-hover:to-pink-500 
+                                            hover:text-white dark:text-white focus:ring-4 focus:outline-none focus:ring-purple-200 
+                                            dark:focus:ring-purple-800"
+                                            ng-click="removeKeycap(section.id, keycap.id)" 
+                                        >
+                                            <span class=" p-1 transition-all ease-in duration-75 bg-white dark:bg-gray-600 rounded-md group-hover:bg-opacity-0">
+                                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+                                                </svg>
+                                            </span>
+                                        </button>
+                                        <img ng-src="{{keycap.img_url}}" class="h-auto max-w-full rounded-lg" alt="Placeholder Image">
+                                    </div>
+                                    <div>
+                                        <h5 class="text-center text-xl text-purple-50">{{keycap.name}}</h5>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <div ng-if="section.type == 'text'">
-                            <div class="form-floating">
-                                <textarea class="form-control" ng-model="section.data" ng-change="lazyInputChange(section)" placeholder="Leave a comment here" id="floatingTextarea"></textarea>
-                                <label for="floatingTextarea">Your note</label>
-                            </div>
-                        </div>
+                    </div>
+                </div>
+                <div ng-if="section.type == 'text'">
+                    <div class="form-floating">
+                        <textarea class="form-control" ng-model="section.data" ng-change="lazyInputChange(section)" placeholder="Leave a comment here" id="floatingTextarea"></textarea>
+                        <label for="floatingTextarea">Your note</label>
                     </div>
                 </div>
             </div>
         </div>
+
+        <!--Footer-->
+        <div class="w-full pt-16 pb-6 text-sm text-center md:text-left fade-in">
+
+        </div>
+      </div>
     </div>
 </div>
-
