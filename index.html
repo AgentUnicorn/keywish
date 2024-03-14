@@ -19,9 +19,20 @@
 
     <!-- Tailwind -->
     <script src="https://cdn.tailwindcss.com"></script>
-
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            backgroundImage: {
+              'main': "url('/assets/header.png')",
+            }
+          }
+        }
+      }
+    </script>
     <!-- Cropper -->
     <link rel="stylesheet" href="libs/ui-cropper/ui-cropper.css">
+    <link rel="stylesheet" href="style.css">
     <script src='libs/ui-cropper/ui-cropper.js'></script>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.4.1/html2canvas.min.js"></script>

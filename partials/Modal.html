@@ -7,21 +7,21 @@
     }
 </style>
 <div class="fixed inset-0 z-50 overflow-auto bg-black bg-opacity-50 flex items-center justify-center">
-    <div class="bg-white w-full max-w-3xl p-8 rounded-lg shadow-md overflow-auto max-h-[90vh]" >
-        <div class="text-center">
+    <div class="bg-main bg-cover bg-fixed w-full max-w-3xl p-8 rounded-lg shadow-md overflow-auto max-h-[90vh]" >
+        <div class="text-center text-white">
             <h5 class="text-2xl font-semibold">{{ action === 'create' ? 'Create' : 'Edit' }} your keycap</h5>
         </div>
         <form class="mt-4">
             <div class="mb-4">
-                <label for="name" class="block text-sm font-medium text-gray-600">Name</label>
+                <label for="name" class="block text-sm font-medium text-white">Name</label>
                 <input type="text" class="mt-1 p-2 w-full border rounded-md" id="name" ng-model="keycap.name" aria-describedby="nameHelp">
             </div>
             <div class="mb-4">
-                <label for="fileUrl" class="block text-sm font-medium text-gray-600">Image Link</label>
+                <label for="fileUrl" class="block text-sm font-medium text-white">Image Link</label>
                 <input type="text" ng-model="myImage" class="mt-1 p-2 w-full border rounded-md" id="fileUrl" aria-describedby="fileUrlHelp">
             </div>
             <div class="mb-4">
-                <label for="fileInput" class="block text-sm font-medium text-gray-600">Upload Image</label>
+                <label for="fileInput" class="block text-sm font-medium text-white">Upload Image</label>
                 <input type="file" class="mt-1 p-2 w-full border rounded-md" id="fileInput" aria-describedby="fileInputHelp">
             </div>
             <div class="mb-4">
