@@ -11,6 +11,14 @@ wishlist.controller("WishlistController", function($scope, $uibModal, WishlistSe
     }
 
     let debounceTimeout;
+
+    // Version info
+    $scope.version = "1.0";
+    $scope.releaseDate = "March 14, 2024"; 
+    $scope.showVersionInfo = true;
+    $timeout(function() {
+        $scope.showVersionInfo = false;
+    }, 5000);
     
     $scope.showContent = function(section_id) 
     {
