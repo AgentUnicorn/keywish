@@ -1,6 +1,6 @@
 app.controller(
   "ExportModalController",
-  function ($scope, $uibModalInstance, wishlist) {
+  function ($scope, $uibModalInstance, wishlist, $timeout) {
     $scope.wishlist = wishlist ?? {};
     $scope.element = angular.element(
       document.getElementById("export-template")
@@ -54,6 +54,43 @@ app.controller(
     //       .attr("href", newData);
     //   }
     // };
+    // $timeout($scope.draw, 100); // Call drawImages after a short delay to ensure DOM is ready
+
+    $scope.draw = function () {
+      const canvas = document.getElementById("myCanvas");
+      let ctx = canvas.getContext("2d");
+      let row = 0;
+      let col = 0;
+      let spacing = 10; // Spacing between images
+      let imageSize = 150; // Size of each image
+      let maxCols = Math.ceil(canvas.width / (imageSize + spacing)); // Maximum number of columns
+
+      wishlist.forEach((section) => {
+        console.log(row)
+        if (section.data) {
+          for (let i = 0; i < section.data.length; i++) {
+            let image = new Image();
+            image.src = section.data[i].img_url;
+            image.onload = function () {
+              ctx.drawImage(
+                image,
+                col * (imageSize + spacing),
+                row * (imageSize + spacing),
+                imageSize,
+                imageSize
+              );
+
+              col++;
+              if (col >= maxCols) {
+                col = 0;
+                row++;
+              }
+            };
+          }
+        }
+      });
+    };
+
 
     $scope.save = function () {
       $uibModalInstance.close("OK");
