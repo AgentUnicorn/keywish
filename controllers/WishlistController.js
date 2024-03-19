@@ -1,5 +1,5 @@
 var wishlist = angular.module("WishlistController", []);
-wishlist.controller("WishlistController", function($scope, $uibModal, WishlistService, $timeout)
+wishlist.controller("WishlistController", function($scope, $uibModal, WishlistService, $timeout, VersionService, version)
 {
     $scope.sections = WishlistService.getAllSection();
     $scope.data = {};    
@@ -13,7 +13,7 @@ wishlist.controller("WishlistController", function($scope, $uibModal, WishlistSe
     let debounceTimeout;
 
     // Version info
-    $scope.version = "1.0";
+    $scope.version = version;
     $scope.releaseDate = "March 14, 2024"; 
     
     $scope.showContent = function(section_id) 
