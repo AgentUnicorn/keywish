@@ -7,27 +7,26 @@
     }
 </style>
 <div class="fixed inset-0 z-50 bg-black bg-opacity-50 flex items-center justify-center">
-    <div class="modal-content max-h-[90vh] overflow-auto bg-main bg-cover bg-fixed w-full max-w-[56rem] p-8 rounded-lg shadow-xl">
-        <div class="modal-body">
+    <div class="modal-content bg-main bg-cover bg-fixed w-full max-w-[65rem] p-8 rounded-lg shadow-xl">
+        <div class="modal-body max-h-[70vh] overflow-auto">
             <div id="export-container">
                 <div id="export-template">
                     <ng-include src="'partials/ExportTemplate.html'"></ng-include>
                 </div>
             </div>
         </div>
-        <div class="modal-footer mt-4">
+        <div class="modal-footer flex justify-end mt-6">
             <button 
                 ng-click="exportToPNG()" 
-                class="text-blue-700 hover:text-white border border-blue-700 hover:bg-blue-800 
-                focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 
-                dark:border-blue-500 dark:text-blue-500 dark:hover:text-white dark:hover:bg-blue-500 dark:focus:ring-blue-800"
+                class="text-white bg-[#3266e3] hover:bg-[#2557D6]/90 focus:ring-4 focus:ring-[#2557D6]/50 focus:outline-none 
+                font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:focus:ring-[#2557D6]/50 me-2"
             >
                 Download
             </button>
             <button 
-                class="text-gray-900 hover:text-white border border-gray-800 hover:bg-gray-900 focus:ring-4 
-                focus:outline-none focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 
-                dark:border-gray-600 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-800"
+                class="text-gray-900 bg-white hover:bg-gray-100 border border-gray-200 focus:ring-4 focus:outline-none 
+                focus:ring-gray-100 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center 
+                dark:focus:ring-gray-600 dark:bg-gray-800 dark:border-gray-700 dark:text-white dark:hover:bg-gray-700"
                 ng-click="cancel()"
             >
                 Cancel
