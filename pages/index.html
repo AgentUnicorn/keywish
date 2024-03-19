@@ -32,13 +32,10 @@
             transform: translateX(100%);
         }
     }
-    .global-notification.fadeOut {
-        animation: fadeOutLeft 0.5s ease-out forwards;
-    }
 </style>
 
 <div class="h-[100vh] overflow-auto tracking-normal text-indigo-400 bg-cover bg-fixed bg-main">
-    <div class="global-notification" ng-class="{ 'fadeOut': !showVersionInfo }">
+    <div class="global-notification">
         Version {{ version }} <br> Release Date: {{ releaseDate }}
     </div>
     <div class="h-full">
