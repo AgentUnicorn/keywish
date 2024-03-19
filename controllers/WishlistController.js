@@ -48,6 +48,28 @@ wishlist.controller("WishlistController", function($scope, $uibModal, WishlistSe
         });
     }
 
+    $scope.openEditModal = function(section_id, keycap)
+    {
+        const modalInstance = $uibModal.open({
+            templateUrl: 'partials/Modal.html', // Path to your modal content template
+            controller: 'ModalController', // Controller for the modal instance
+            size: 'lg', // Optional size (e.g., 'sm', 'lg')
+            windowClass: 'show',
+            resolve: {
+                section_id: () => section_id,
+                keycap: () => keycap,
+                action: () => 'edit',
+                wishlist: () => $scope.sections
+            }
+        });
+        
+        modalInstance.result.then(function(result) {
+            // Handle modal close (optional)
+        }, function() {
+            // Handle modal dismiss (optional)
+        });
+    }
+
     $scope.openExportModal = function()
     {
         const modalInstance = $uibModal.open({

@@ -57,8 +57,8 @@ app.controller(
     };
 
     $scope.save = function () {
-      WishlistService.editKeycap($scope.section_id, $scope.keycap);
-      // $uibModalInstance.close('OK');
+      WishlistService.editKeycap($scope.wishlist, $scope.section_id, $scope.keycap);
+      $uibModalInstance.close($scope.wishlist);
     };
 
     $scope.cancel = function () {
