@@ -1,10 +1,49 @@
 <style>
+    .global-notification {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        /* background-color: #4CAF50;  */
+        color: white; 
+        padding: 15px 20px;
+        border-radius: 5px;
+        cursor: pointer;
+        z-index: 19;
+        animation: fadeInRight 0.5s ease-in forwards;
+    }
+    @keyframes fadeInRight {
+        from {
+            opacity: 0;
+            transform: translateX(100%);
+        }
+        to {
+            opacity: 1;
+            transform: translateX(0);
+        }
+    }
+
+    @keyframes fadeOutLeft {
+        from {
+            opacity: 1;
+            transform: translateX(0);
+        }
+        to {
+            opacity: 0;
+            transform: translateX(100%);
+        }
+    }
+    .global-notification.fadeOut {
+        animation: fadeOutLeft 0.5s ease-out forwards;
+    }
 </style>
 
 <div class="h-[100vh] overflow-auto tracking-normal text-indigo-400 bg-cover bg-fixed bg-main">
+    <div class="global-notification" ng-class="{ 'fadeOut': !showVersionInfo }">
+        Version {{ version }} <br> Release Date: {{ releaseDate }}
+    </div>
     <div class="h-full">
         <!--Nav-->
-        <div class="w-full container mx-auto pt-5 fixed top-0 z-10">
+        <div class="w-[100vw] mt-5 fixed top-0 z-10">
             <div class="w-full flex items-center justify-between px-10">
                 <a class="flex items-center text-indigo-400 no-underline hover:no-underline font-bold text-2xl lg:text-4xl" href="#">
                     Key<span class="bg-clip-text text-transparent bg-gradient-to-r from-green-400 via-pink-500 to-purple-500">wish</span>
@@ -37,11 +76,11 @@
                     <div class="flex w-full relative items-center">
                         <!-- <h3 style="cursor: pointer;">{{section.title}}</h3> -->
                         <h3
-                            class="flex cursor-pointer items-center justify-start me-6 w-[300px] text-2xl min-h-[42px]"
+                            class="flex cursor-pointer items-center justify-start me-6 min-w-[300px] truncate text-2xl min-h-[42px] border-b-2 border-fuchsia-300"
                             ng-click="editTitle(section)" 
                             ng-hide="section.editing"
-                        >
-                            {{section.title}}
+                        > 
+                          {{section.title.length ? section.title : "Section name here..."}}
                         </h3>
                         <button 
                             type="button"
@@ -49,6 +88,7 @@
                             focus:ring-4 focus:outline-none focus:ring-cyan-300 dark:focus:ring-cyan-800 
                             font-medium rounded-lg text-sm px-4 py-2.5 text-center me-2 absolute right-0 bottom-0"
                             ng-click="openNewModal(section.id)"
+                            ng-if="section.type !== 'text'"
                         >
                             Add
                         </button>
@@ -123,11 +163,21 @@
                             </div>
                         </div>
                     </div>
-                </div>
-                <div ng-if="section.type == 'text'">
-                    <div class="form-floating">
-                        <textarea class="form-control" ng-model="section.data" ng-change="lazyInputChange(section)" placeholder="Leave a comment here" id="floatingTextarea"></textarea>
-                        <label for="floatingTextarea">Your note</label>
+                    <div ng-if="section.type == 'text'">
+                        <div class="min-w-[500px]">
+                            <label for="floatingTextarea" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Your note</label>
+                            <textarea 
+                                id="floatingTextarea" 
+                                rows="4" 
+                                class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 
+                                focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 
+                                dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                                placeholder="Write your note here..."
+                                ng-model="section.data" 
+                                ng-change="lazyInputChange(section)"
+                            >
+                            </textarea>
+                        </div>
                     </div>
                 </div>
             </div>
