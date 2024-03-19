@@ -29,11 +29,6 @@ app.service('WishlistService', function(HelperService, $http) {
     this.createKeycap = function (wishlist, section_id, keycap) 
     {  
         let id = HelperService.guid()
-        // console.log(keycap.fileURL)
-        // HelperService.send_msg_telegram("heelo " + id)
-        // let img_url = this.saveCroppedImage(id, keycap.fileURL)
-        // console.log(img_url)
-
         let new_keycap = {
             id: id,
             name: keycap.name,
@@ -42,6 +37,13 @@ app.service('WishlistService', function(HelperService, $http) {
 
         wishlist = this.pushKeycapIntoSectionData(wishlist, section_id, new_keycap)
         localStorage.setItem('sections', JSON.stringify(wishlist));
+        return wishlist
+    }
+
+    this.editKeycap = function (wishlist, section_id, keycap)
+    {
+        wishlist = this.replaceKeycapInSectionData(wishlist, section_id, keycap)
+        localStorage.setItem('sections', JSON.stringify(wishlist))
         return wishlist
     }
 
@@ -58,7 +60,6 @@ app.service('WishlistService', function(HelperService, $http) {
         // Create a new object to store in IndexedDB
         let blob = HelperService.dataURLtoBlob(fileURL)
         let fileName = keycap_id + "-" + Date.now() + ".png"
-        console.log(blob.type)
         let tempFile = new File([blob], fileName);
 
         var formData = new FormData();
@@ -112,6 +113,20 @@ app.service('WishlistService', function(HelperService, $http) {
             console.error("Object with id " + section_id + " not found.");
         }
     
+        return sections;
+    }
+
+    this.replaceKeycapInSectionData = function (sections, section_id, keycap) {
+        var section = sections.find(s => s.id === section_id);
+        if (section) {
+            var index = sections.findIndex(obj => obj.id === keycap.id);
+            if (index !== -1) {
+                section[index] = newObj;
+            }
+        } else {
+            console.error("Object with id " + section_id + " not found.");
+        }
+        
         return sections;
     }
 

@@ -35,8 +35,13 @@ app.config(function($routeProvider) {
     $routeProvider
         
     .when('/', {
-    templateUrl : 'pages/index.html',
-    controller : 'WishlistController'
+        templateUrl : 'pages/index.html',
+        controller : 'WishlistController',
+        resolve: {
+            version: function(VersionService) {
+                return VersionService.getVersion();
+            }
+        }
     })
         
     // .when('/blog', {
