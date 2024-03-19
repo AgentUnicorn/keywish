@@ -40,6 +40,9 @@ app.config(function($routeProvider) {
         resolve: {
             version: function(VersionService) {
                 return VersionService.getVersion();
+            },
+            timestamp: function(VersionService) {
+                return VersionService.getTimestamp()
             }
         }
     })

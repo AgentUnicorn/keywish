@@ -4,4 +4,10 @@ app.service('VersionService', function($http) {
             return response.data;
         });
     };
+
+    this.getTimestamp = function() {
+        return $http.get('TIMESTAMP').then(function(response) {
+            return response.data;
+        });
+    };
 })
