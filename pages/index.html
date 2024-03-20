@@ -1,11 +1,8 @@
 <style>
     .global-notification {
-        position: fixed;
-        top: 20px;
-        right: 20px;
         /* background-color: #4CAF50;  */
         color: white; 
-        padding: 15px 20px;
+        padding: 0 25px 0 25px;
         border-radius: 5px;
         cursor: pointer;
         z-index: 19;
@@ -35,16 +32,21 @@
 </style>
 
 <div class="h-[100vh] overflow-auto tracking-normal text-indigo-400 bg-cover bg-fixed bg-main">
-    <div class="global-notification">
-        Version {{ version }} <br> Release Date: {{ releaseDate }}
-    </div>
     <div class="h-full">
         <!--Nav-->
-        <div class="w-[100vw] mt-5 fixed top-0 z-10">
+        <div class="w-full py-7 fixed flex justify-between top-0 z-50">
             <div class="w-full flex items-center justify-between px-10">
                 <a class="flex items-center text-indigo-400 no-underline hover:no-underline font-bold text-2xl lg:text-4xl" href="#">
                     Key<span class="bg-clip-text text-transparent bg-gradient-to-r from-green-400 via-pink-500 to-purple-500">wish</span>
                 </a>
+            </div>
+            <div class="global-notification text-ellipsis min-w-fit truncate">
+                <p>
+                    Version {{ version }}
+                </p>
+                 <p> 
+                    Release Date: {{ releaseDate }} 
+                </p>
             </div>
         </div>
 
@@ -139,7 +141,7 @@
                                     <div class="relative max-w-fit">
                                         <button 
                                             class="absolute top-2 right-2 inline-flex items-center justify-center p-0.5 
-                                            overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br 
+                                            overflow-hidden text-sm font-medium text-gray-900 rounded-md group bg-gradient-to-br 
                                             from-purple-500 to-pink-500 group-hover:from-purple-500 group-hover:to-pink-500 
                                             hover:text-white dark:text-white focus:ring-4 focus:outline-none focus:ring-purple-200 
                                             dark:focus:ring-purple-800"
@@ -151,16 +153,21 @@
                                                 </svg>
                                             </span>
                                         </button>
-                                        <button class="absolute top-2 left-2 inline-flex items-center justify-center p-0.5 
+                                        <!-- <button class="absolute top-2 left-2 inline-flex items-center justify-center p-0.5 
                                             overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br 
                                             from-purple-500 to-pink-500 group-hover:from-purple-500 group-hover:to-pink-500 
                                             hover:text-white dark:text-white focus:ring-4 focus:outline-none focus:ring-purple-200 
                                             dark:focus:ring-purple-800"
-                                            ng-click="openEditModal(section.id, keycap)"
+                                            
                                         >
                                             Edit
-                                        </button>
-                                        <img ng-src="{{keycap.img_url}}" class="h-auto max-w-full rounded-lg" alt="Placeholder Image">
+                                        </button> -->
+                                        <img 
+                                            ng-click="openEditModal(section.id, keycap)"
+                                            ng-src="{{keycap.img_url}}" 
+                                            class="h-auto max-w-full rounded-lg cursor-pointer" 
+                                            alt="Placeholder Image"
+                                        >
                                     </div>
                                     <div>
                                         <h5 class="text-center text-xl text-purple-50">{{keycap.name}}</h5>
@@ -169,9 +176,9 @@
                             </div>
                         </div>
                     </div>
-                    <div ng-if="section.type == 'text'">
-                        <div class="min-w-[500px]">
-                            <label for="floatingTextarea" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Your note</label>
+                    <div ng-if="section.type == 'text'" class="w-full mt-3">
+                        <div class="w-[35%]">
+                            <label for="floatingTextarea" class="block mb-2 text-lg font-medium text-gray-900 dark:text-white">Your note</label>
                             <textarea 
                                 id="floatingTextarea" 
                                 rows="4" 
