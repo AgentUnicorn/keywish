@@ -20,11 +20,11 @@
                     <h5>{{section.title}}</h5>
                 </div>
             </div>
-            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 justify-items-center">
+            <div ng-if="section.type !== 'text'" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 justify-items-center items-center">
                 <div class="col mb-3 max-w-fit" ng-repeat="keycap in section.data track by $index">
                     <div class="item">
-                        <img class="w-full h-auto rounded-md mb-2" ng-src="{{keycap.img_url}}" alt="{{keycap.name}}"/>
-                        <span class="block text-center text-white text-sm">{{keycap.name}}</span>
+                        <img class="w-full h-auto rounded-md" ng-src="{{keycap.img_url}}" alt="{{keycap.name}}"/>
+                        <span ng-show="keycap.name.length > 0" class="block text-center text-white text-sm mt-2">{{keycap.name}}</span>
                     </div>
                 </div>
             </div>
