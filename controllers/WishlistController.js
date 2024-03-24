@@ -124,4 +124,19 @@ wishlist.controller("WishlistController", function($scope, $uibModal, WishlistSe
             localStorage.setItem('sections', JSON.stringify($scope.sections));
         }, 500); // Adjust the delay (in milliseconds) as needed
     };
+
+    $scope.openSettingModal = function () {
+        const modalInstance = $uibModal.open({
+            templateUrl: 'partials/SettingModal.html', // Path to your modal content template
+            controller: 'SettingModalController', // Controller for the modal instance
+            size: 'lg', // Optional size (e.g., 'sm', 'lg')
+            windowClass: 'show',
+        });
+
+        modalInstance.result.then(function(result) {
+            // Handle modal close (optional)
+        }, function() {
+            // Handle modal dismiss (optional)
+        });
+    }
 });
