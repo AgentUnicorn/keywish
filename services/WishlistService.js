@@ -55,56 +55,6 @@ app.service('WishlistService', function(HelperService, $http) {
         return wishlist
     }
 
-    this.saveCroppedImage = function (keycap_id, fileURL) {
-      if (fileURL) {
-        // Create a new object to store in IndexedDB
-        let blob = HelperService.dataURLtoBlob(fileURL)
-        let fileName = keycap_id + "-" + Date.now() + ".png"
-        let tempFile = new File([blob], fileName);
-
-        var formData = new FormData();
-        formData.append('image', tempFile);
-        return $http({
-            url: "https://api.imgur.com/3/image",
-            method: "POST",
-            datatype: "json",
-            headers: {
-                "Authorization": "Client-ID 7c61c07bd376452",
-                "Content-Type": "multipart/form-data;"
-            },
-            data: formData,
-        }).then(function(response) {
-            console.log(response)
-        })
-        console.log(formData.get('photo'))
-        return
-
-        var botToken = '6748941821:AAF1pzYYUzqn3mj2HCiD36nqmI1BwVy38Pc';
-        var chatId = '-4148808693';
-
-        return $http.post('https://api.telegram.org/bot' + botToken + '/sendPhoto?chat_id=' + chatId, formData, {
-            headers: {
-                'Content-Type': undefined
-            }
-        }).then(function(response) {
-            if (response.data && response.data.result && response.data.result.photo) {
-                // Telegram returns multiple sizes of the uploaded photo, we'll use the largest available size
-                var photoArray = response.data.result.photo;
-                var largestPhoto = photoArray[photoArray.length - 1];
-                var photoUrl = 'https://telegram.org/img/' + largestPhoto.file_id;
-                return photoUrl;
-            } else {
-                throw new Error('Failed to upload image to Telegram CDN.');
-            }
-        }).catch(function(error) {
-            console.error('Error uploading image to Telegram CDN:', error);
-            throw error; // Rethrow the error to be handled by the caller
-        });
-      } else {
-        console.error("Image URL is not available.");
-      }
-    };
-
     this.pushKeycapIntoSectionData = function (sections, section_id, keycap) {
         var section = sections.find(s => s.id === section_id);
         if (section) {
@@ -139,5 +89,30 @@ app.service('WishlistService', function(HelperService, $http) {
         }
     
         return sections;
+    }
+
+    this.getSetting = function () {
+        let setting = JSON.parse(localStorage.getItem('setting'));
+        if (setting) return setting
+        return {
+            general: {
+                keycap_per_line: 4,
+                priority_color: '#000000',
+                priority_font: 'roboto',
+                background_color: '#FFFFFF'
+            },
+            legend: {
+                font: 'roboto',
+                color: '#FF0000'
+            },
+            title: {
+                font: 'roboto',
+                color: '#FF0000'
+            }
+        }
+    }
+
+    this.saveSetting = function (setting) {
+        localStorage.setItem('setting', JSON.stringify(setting));
     }
 });
