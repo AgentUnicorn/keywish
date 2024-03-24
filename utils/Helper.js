@@ -72,19 +72,7 @@ app.service("HelperService", function ($http) {
 
   this.timestampToDate = function (timestamp) {
     // Convert timestamp to milliseconds
-    var date = new Date(1710871397003);
+    var date = new Date(timestamp * 1000);
     return date.toLocaleDateString()
-    
-    // Get day, month, and year
-    var day = date.getDate();
-    var month = date.getMonth() + 1; // Month is zero-based, so add 1
-    var year = date.getFullYear();
-    
-    // Format day and month with leading zeros if needed
-    var formattedDay = (day < 10 ? '0' : '') + day;
-    var formattedMonth = (month < 10 ? '0' : '') + month;
-    
-    // Return formatted date string
-    return formattedDay + '/' + formattedMonth + '/' + year;
 }
 });

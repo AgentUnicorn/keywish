@@ -15,6 +15,7 @@ wishlist.controller("WishlistController", function($scope, $uibModal, WishlistSe
     // Version info
     $scope.version = version;
     $scope.releaseDate = HelperService.timestampToDate(timestamp); 
+    console.log($scope.releaseDate)
     
     $scope.showContent = function(section_id) 
     {
