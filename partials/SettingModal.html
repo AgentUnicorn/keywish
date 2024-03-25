@@ -11,60 +11,62 @@
             <h5 class="text-2xl font-semibold">Setting</h5>
         </div>
         <div class="max-h-[70vh] overflow-x-hidden overflow-y-auto px-2">
-            <form class="mt-4">
-                General
-                <div class="mb-4">
-                    <label for="general_keycap_per_line" class="block text-sm font-medium text-white">Keycap per line</label>
-                    <input min="1" type="number" class="mt-1 p-2 w-full border rounded-md" id="general_keycap_per_line" ng-model="setting.general.keycap_per_line" aria-describedby="nameHelp">
+            <form class="my-4">
+                <p class="text-lg text-indigo-400 font-medium mb-2 mt-4"> General </p>
+                <div class="grid grid-cols-2 gap-4 px-3">
+                    <div>
+                        <label for="general_keycap_per_line" class="block text-sm font-medium text-white">Keycap per line</label>
+                        <input min="1" type="number" class="mt-1 p-2 w-full border rounded-md" id="general_keycap_per_line" ng-model="setting.general.keycap_per_line" aria-describedby="nameHelp">
+                    </div>
+                    <div>
+                        <label for="general_priority_color" class="block text-sm font-medium text-white">Priority Color</label>
+                        <!-- <div class="color-square" ng-style="{'background-color': setting.general.priority_color}"></div> -->
+                        <select class="mt-1 p-2 w-full border rounded-md" id="general_priority_color" ng-model="setting.general.priority_color">
+                            <option ng-repeat="c in colors" ng-selected="c.hex === setting.general.priority_color" value="{{c.hex}}">{{c.name}} </option>
+                        </select>
+                    </div>
+                    <div>
+                        <label for="general_priority_font" class="block text-sm font-medium text-white">Priority Font</label>
+                        <select class="mt-1 p-2 w-full border rounded-md" id="general_priority_font" ng-model="setting.general.priority_font">
+                            <option ng-repeat="f in fonts" ng-selected="f.slug === setting.general.priority_font" value="{{f.slug}}">{{f.name}}</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label for="general_background_color" class="block text-sm font-medium text-white">Background Color</label>
+                        <select class="mt-1 p-2 w-full border rounded-md" id="general_background_color" ng-model="setting.general.background_color">
+                            <option ng-repeat="c in colors" ng-selected="c.hex === setting.general.background_color" value="{{c.hex}}">{{c.name}}</option>
+                        </select>
+                    </div>
                 </div>
-                <div class="mb-4">
-                    <label for="general_priority_color" class="block text-sm font-medium text-white">Priority Color</label>
-                    <!-- <div class="color-square" ng-style="{'background-color': setting.general.priority_color}"></div> -->
-                    <select class="mt-1 p-2 w-full border rounded-md" id="general_priority_color" ng-model="setting.general.priority_color">
-                        <option ng-repeat="c in colors" ng-selected="c.hex === setting.general.priority_color" value="{{c.hex}}">{{c.name}} </option>
-                    </select>
+                <p class="text-lg text-indigo-400 font-medium mb-2 mt-4"> Legend </p>
+                <div class="grid grid-cols-2 gap-4 px-3">
+                    <div>
+                        <label for="legend_font" class="block text-sm font-medium text-white">Font</label>
+                        <select class="mt-1 p-2 w-full border rounded-md" id="legend_font" ng-model="setting.legend.font">
+                            <option ng-repeat="f in fonts" ng-selected="f.slug === setting.legend.font" value="{{f.slug}}">{{f.name}}</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label for="legend_color" class="block text-sm font-medium text-white">Color</label>
+                        <select class="mt-1 p-2 w-full border rounded-md" id="legend_color" ng-model="setting.legend.color">
+                            <option ng-repeat="c in colors" ng-selected="c.hex === setting.legend.color" value="{{c.hex}}">{{c.name}}</option>
+                        </select>
+                    </div>
                 </div>
-                <div class="mb-4">
-                    <label for="general_priority_font" class="block text-sm font-medium text-white">Priority Font</label>
-                    <select class="mt-1 p-2 w-full border rounded-md" id="general_priority_font" ng-model="setting.general.priority_font">
-                        <option ng-repeat="f in fonts" ng-selected="f.slug === setting.general.priority_font" value="{{f.slug}}">{{f.name}}</option>
-                    </select>
-                </div>
-                <div class="mb-4">
-                    <label for="general_background_color" class="block text-sm font-medium text-white">Background Color</label>
-                    <select class="mt-1 p-2 w-full border rounded-md" id="general_background_color" ng-model="setting.general.background_color">
-                        <option ng-repeat="c in colors" ng-selected="c.hex === setting.general.background_color" value="{{c.hex}}">{{c.name}}</option>
-                    </select>
-                </div>
-                <br>
-
-                Legend
-                <div class="mb-4">
-                    <label for="legend_font" class="block text-sm font-medium text-white">Font</label>
-                    <select class="mt-1 p-2 w-full border rounded-md" id="legend_font" ng-model="setting.legend.font">
-                        <option ng-repeat="f in fonts" ng-selected="f.slug === setting.legend.font" value="{{f.slug}}">{{f.name}}</option>
-                    </select>
-                </div>
-                <div class="mb-4">
-                    <label for="legend_color" class="block text-sm font-medium text-white">Color</label>
-                    <select class="mt-1 p-2 w-full border rounded-md" id="legend_color" ng-model="setting.legend.color">
-                        <option ng-repeat="c in colors" ng-selected="c.hex === setting.legend.color" value="{{c.hex}}">{{c.name}}</option>
-                    </select>
-                </div>
-                <br>
-
-                Title
-                <div class="mb-4">
-                    <label for="title_font" class="block text-sm font-medium text-white">Font</label>
-                    <select class="mt-1 p-2 w-full border rounded-md" id="title_font" ng-model="setting.title.font">
-                        <option ng-repeat="f in fonts" ng-selected="f.slug === setting.title.font" value="{{f.slug}}">{{f.name}}</option>
-                    </select>
-                </div>
-                <div class="mb-4">
-                    <label for="title_color" class="block text-sm font-medium text-white">Color</label>
-                    <select class="mt-1 p-2 w-full border rounded-md" id="title_color" ng-model="setting.title.color">
-                        <option ng-repeat="c in colors" ng-selected="c.hex === setting.title.color" value="{{c.hex}}">{{c.name}}</option>
-                    </select>
+                <p class="text-lg text-indigo-400 font-medium mb-2 mt-4"> Title </p>
+                <div class="grid grid-cols-2 gap-4 px-3">
+                    <div>
+                        <label for="title_font" class="block text-sm font-medium text-white">Font</label>
+                        <select class="mt-1 p-2 w-full border rounded-md" id="title_font" ng-model="setting.title.font">
+                            <option ng-repeat="f in fonts" ng-selected="f.slug === setting.title.font" value="{{f.slug}}">{{f.name}}</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label for="title_color" class="block text-sm font-medium text-white">Color</label>
+                        <select class="mt-1 p-2 w-full border rounded-md" id="title_color" ng-model="setting.title.color">
+                            <option ng-repeat="c in colors" ng-selected="c.hex === setting.title.color" value="{{c.hex}}">{{c.name}}</option>
+                        </select>
+                    </div>
                 </div>
             </form>
         </div>
