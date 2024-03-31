@@ -6,7 +6,7 @@ app.controller(
       document.getElementById("export-template")
     );
     $scope.canvas = null;
-    $scope.setting = WishlistService.getSetting();
+    const setting = WishlistService.getSetting();
 
     $scope.draw = function () {
       $scope.canvas = document.getElementById("myCanvas");
@@ -35,6 +35,12 @@ app.controller(
         var fontSize = 16; // Font size for title and name
         var sectionPadding = 80;
         var lineWidth = 2;
+        
+        // From setting
+        var textColor = setting.general.priority_color
+        // let imagesPerRow = keycap_per_line;
+        // var textColor = "#FFFFFF"
+        let imagesPerRow = 7;
 
         function calculateImagesPerRow(arrayLength) {
           return arrayLength <= 16 ? 4 : 6;
@@ -42,9 +48,7 @@ app.controller(
 
         var rowCount = 0;
         $scope.wishlist.forEach(function (section, index) {
-          // if (section.type == "array") {
-          // let imagesPerRow = $scope.setting.general.keycap_per_line;
-          let imagesPerRow = 7;
+
           var totalImageWidth = imagesPerRow * imageWidth;
           if (index > 0) {
             rowCount += Math.ceil(
@@ -60,8 +64,7 @@ app.controller(
             (imageHeight + fontSize + spacingY) * rowCount +
             sectionPadding * index;
           // console.log(titleY)
-          ctx.fillStyle = "white";
-          ctx.fillStyle = "white";
+          ctx.fillStyle = textColor;
           ctx.fillText(section.title, titleX, titleY);
 
           let lineY = (fontSize - lineWidth) / 2;
@@ -72,8 +75,7 @@ app.controller(
             titleX - spacingX,
             titleY - lineY
           );
-          // // console.log(titleX)
-          // // console.log(ctx.measureText(section.title).width + titleX + spacingX)
+
           drawLine(
             ctx,
             ctx.measureText(section.title).width + titleX + spacingX,
@@ -81,15 +83,6 @@ app.controller(
             $scope.canvas.width - spacingX,
             titleY - lineY
           );
-
-          // drawLine(ctx, 20, $scope.canvas - spacingX, titleY, titleY)
-          // ctx.strokeStyle = "black";
-          // ctx.lineWidth = 2;
-          // ctx.beginPath();
-          // ctx.moveTo(startX, startY);
-          // ctx.lineTo(endX, endY);
-          // ctx.stroke();
-          // drawLine(ctx, ctx.measureText(section.title).width + titleX + spacingX, $scope.canvas - spacingX, titleY, titleY)
 
           if (section.type == "array") {
             // let maxLine = 1;
@@ -159,7 +152,7 @@ app.controller(
       let currentY = 0;
 
       sections.forEach((section) => {
-        ctx.fillStyle = "white";
+        ctx.fillStyle = textColor;
         ctx.font = "bold 16px Arial";
         ctx.fillText(
           "----------- " + section.title + " ------------",
@@ -177,7 +170,7 @@ app.controller(
             img.src = item.img_url;
             img.onload = () => {
               ctx.drawImage(img, x, y, imageWidth, imageHeight);
-              ctx.fillStyle = "white";
+              ctx.fillStyle = textColor;
               ctx.font = "12px Arial";
               ctx.fillText(item.name, x, y + imageHeight + 15);
             };
@@ -185,7 +178,7 @@ app.controller(
 
           currentY += imageHeight + 40; // 10px spacing + 30px text spacing
         } else if (section.type === "text") {
-          ctx.fillStyle = "white";
+          ctx.fillStyle = textColor;
           ctx.font = "14px Arial";
           const lines = wrapText(
             ctx,
