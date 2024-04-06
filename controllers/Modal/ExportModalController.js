@@ -163,7 +163,7 @@ app.controller(
               ctx.fillStyle = textColor;
               let textWidth = ctx.measureText(keycap.name).width;
               if (keycap.name) {
-                let line = wrapText(ctx, keycap.name, imageWidth, imageX, imageY + imageHeight + spacingY);
+                let line = wrapText(ctx, keycap.name, imageWidth, imageX, imageY + imageHeight + spacingY, true);
                 if (line > sectionRowsMaxline[i]) {
                   sectionRowsMaxline[index] = line
                 }
@@ -261,7 +261,7 @@ app.controller(
       return canvas;
     }
 
-    function wrapText(context, text, maxWidth, x, y) {
+    function wrapText(context, text, maxWidth, x, y, is_center = false) {
       const words = text.split(" ");
       let line = "";
       let lineHeight = 0;
@@ -272,7 +272,11 @@ app.controller(
         const metrics = context.measureText(testLine);
         const testWidth = metrics.width;
         if (testWidth > maxWidth && n > 0) {
-          context.fillText(line, x + (maxWidth - context.measureText(line.trim()).width) / 2, y + lineHeight);
+          if (is_center) {
+            context.fillText(line, x + (maxWidth - context.measureText(line.trim()).width) / 2, y + lineHeight);
+          } else {
+            context.fillText(line, x, y + lineHeight)
+          }
           line = words[n] + " ";
           lineHeight += 20; // 20px spacing between lines
           lines++;
@@ -282,7 +286,11 @@ app.controller(
       }
 
       lines++;
-      context.fillText(line, x + (maxWidth - context.measureText(line.trim()).width) / 2, y + lineHeight);
+      if (is_center) {
+        context.fillText(line, x + (maxWidth - context.measureText(line.trim()).width) / 2, y + lineHeight);
+      } else {
+        context.fillText(line, x, y + lineHeight)
+      }
       return lines;
     }
 
