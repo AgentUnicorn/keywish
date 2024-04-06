@@ -116,25 +116,36 @@ app.controller(
           ctx,
           spacingX,
           lineY,
-          $scope.canvas.width - spacingX,
+          $scope.canvas.width / 2 - spacingX,
           lineY,
           lineColor
         );
         //#endregion
 
         if (section.type == "array") {
-          // let maxLine = 1;
+          let maxLine = 1;
+          let sectionRowsMaxline = {
+            0: 1,
+            1: 1
+          }
+          let current_row = 1;
           section.data.forEach(function (keycap, i) {
             let img = new Image();
             img.onload = function () {
               let row = Math.floor(i / imagesPerRow);
               let col = i % imagesPerRow;
+
+              if (row != current_row) {
+                current_row = row;
+                sectionRowsMaxline[index] = 1
+              }
+
               let imageX = (spacingX + imageWidth) * col + spacingX;
               let imageY =
                 titleY +
                 row * spacingY +
                 fontSize +
-                // (fontSize * maxLine - 1) * row +
+                (fontSize * sectionRowsMaxline[index] - 1) * row +
                 textPadding +
                 row * (imageHeight + spacingY);
 
@@ -151,18 +162,18 @@ app.controller(
               ctx.font = fontSize + "px Arial";
               ctx.fillStyle = textColor;
               let textWidth = ctx.measureText(keycap.name).width;
-              // if (keycap.name) {
-              //   let line = wrapText(ctx, keycap.name, imageWidth, imageX, imageY + imageHeight + spacingY);
-              //   if (line > maxLine) {
-              //     maxLine = line
-              //   }
-              // }
+              if (keycap.name) {
+                let line = wrapText(ctx, keycap.name, imageWidth, imageX, imageY + imageHeight + spacingY);
+                if (line > sectionRowsMaxline[i]) {
+                  sectionRowsMaxline[index] = line
+                }
+              }
               // console.log("Section " + index + ": " + maxLine)
-              ctx.fillText(
-                keycap.name ?? "",
-                imageX + (imageWidth - textWidth) / 2,
-                imageY + imageHeight + spacingY
-              );
+              // ctx.fillText(
+              //   keycap.name ?? "",
+              //   imageX + (imageWidth - textWidth) / 2,
+              //   imageY + imageHeight + spacingY
+              // );
 
               // End of line then update tempCanvasHeight
               // if (i + 1 == imagesPerRow) {
@@ -261,7 +272,7 @@ app.controller(
         const metrics = context.measureText(testLine);
         const testWidth = metrics.width;
         if (testWidth > maxWidth && n > 0) {
-          context.fillText(line, x, y + lineHeight);
+          context.fillText(line, x + (maxWidth - context.measureText(line.trim()).width) / 2, y + lineHeight);
           line = words[n] + " ";
           lineHeight += 20; // 20px spacing between lines
           lines++;
@@ -271,7 +282,7 @@ app.controller(
       }
 
       lines++;
-      context.fillText(line, x, y + lineHeight);
+      context.fillText(line, x + (maxWidth - context.measureText(line.trim()).width) / 2, y + lineHeight);
       return lines;
     }
 
