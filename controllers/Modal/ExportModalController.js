@@ -8,132 +8,199 @@ app.controller(
     $scope.canvas = null;
     const setting = WishlistService.getSetting();
 
+    function calculateImagesPerRow(
+      canvasWidth,
+      imageWidth,
+      numberOfImages,
+      spacingBetweenImages
+    ) {
+      // Calculate total width taken by images and spacing
+      const totalWidthTaken =
+        numberOfImages * imageWidth +
+        (numberOfImages + 1) * spacingBetweenImages;
+
+      // Calculate number of rows
+      const rows = Math.ceil(totalWidthTaken / canvasWidth);
+
+      // Calculate number of images per row
+      const imagesPerRow = Math.ceil(numberOfImages / rows);
+
+      return imagesPerRow;
+    }
+
+    function recalculateSpacingX(canvasWidth, imageWidth, numberOfImages) {
+      return (canvasWidth - numberOfImages * imageWidth) / (numberOfImages + 1);
+    }
+
     $scope.draw = function () {
       $scope.canvas = document.getElementById("myCanvas");
-      var ctx = $scope.canvas.getContext("2d");
+      let ctx = $scope.canvas.getContext("2d");
 
-      // // Clear the canvas
+      // Clear the canvas
       ctx.clearRect(0, 0, $scope.canvas.width, $scope.canvas.height);
 
-      var background = new Image();
-      // background.src = "/assets/header.png";
-      background.src = "../../assets/header.png";
+      // Gradient background
+      const centerX = $scope.canvas.width / 2;
+      const centerY = $scope.canvas.height / 2;
+      const grad = ctx.createRadialGradient(centerX, centerY, 0, centerX, centerY, $scope.canvas.width / 2);
+      grad.addColorStop(0, "#65538A");
+      grad.addColorStop(0.3, "#333150");
+      grad.addColorStop(1, "#121212");
+      
+      // Fill rectangle with gradient
+      ctx.fillStyle = grad;
+      ctx.fillRect(0, 0, $scope.canvas.width, $scope.canvas.height);
 
-      background.onload = function () {
-        ctx.drawImage(background, 0, 0);
+      // Define constants for layout
+      let startX = 20; // X-coordinate of the starting position
+      let startY = 30; // Y-coordinate of the starting position
+      let imageSizeMultiply = 1.8;
+      let imageWidth = 100 * imageSizeMultiply; // Width of each image
+      let imageHeight = 100 * imageSizeMultiply; // Height of each image
+      let spacingX = 20; // Horizontal spacing between images
+      let spacingY = 20; // Vertical spacing between rows
 
-        // Define constants for layout
-        var startX = 20; // X-coordinate of the starting position
-        var startY = 20; // Y-coordinate of the starting position
-        var imagePadding = 10;
-        var imageSizeMultiply = 1.25;
-        var imageWidth = 100 * imageSizeMultiply; // Width of each image
-        var imageHeight = 100 * imageSizeMultiply; // Height of each image
-        var spacingX = 20; // Horizontal spacing between images
-        var spacingY = 20; // Vertical spacing between rows
-        var textPadding = 10; // Padding between text and images
-        var fontSize = 16; // Font size for title and name
-        var sectionPadding = 80;
-        var lineWidth = 2;
-        
-        // From setting
-        var textColor = setting.general.priority_color
-        // let imagesPerRow = keycap_per_line;
-        // var textColor = "#FFFFFF"
-        let imagesPerRow = 7;
+      // Title
+      let sectionColor = "#818CF8";
+      let titleFontSize = 24;
+      let sectionPadding = 50;
 
-        function calculateImagesPerRow(arrayLength) {
-          return arrayLength <= 16 ? 4 : 6;
+      // Line
+      let lineWidth = 2;
+      let lineColor = "#f0abfc";
+
+      // Text
+      let fontSize = 16; // Font size for title and name
+      let textColor = "#FFFFFF";
+      let textPadding = 10; // Padding between text and images
+
+      // Calculate
+      let maxItems = getMaxItem();
+      let imagesPerRow = calculateImagesPerRow(
+        $scope.canvas.width,
+        imageWidth,
+        maxItems,
+        spacingX
+      );
+      spacingX = recalculateSpacingX(
+        $scope.canvas.width,
+        imageWidth,
+        imagesPerRow
+      );
+
+      let rowCount = 0;
+      let tempCanvasHeigh = 0;
+      $scope.wishlist.forEach(function (section, index) {
+        if (index > 0) {
+          rowCount += Math.ceil(
+            $scope.wishlist[index - 1].data.length / imagesPerRow
+          );
         }
 
-        var rowCount = 0;
-        $scope.wishlist.forEach(function (section, index) {
+        //#region Render Section title
+        ctx.font = titleFontSize + "px Arial";
+        let titleX = spacingX;
+        let titleY =
+          startY +
+          (imageHeight + titleFontSize + spacingY) * rowCount +
+          sectionPadding * index;
+        // tempCanvasHeigh = titleY;
+        ctx.fillStyle = sectionColor;
+        ctx.fillText(section.title, titleX, titleY);
+        // tempCanvasHeigh += titleY;
+        //#endregion
 
-          var totalImageWidth = imagesPerRow * imageWidth;
-          if (index > 0) {
-            rowCount += Math.ceil(
-              $scope.wishlist[index - 1].data.length / imagesPerRow
-            );
+        //#region Render Line under section title
+        let lineY = titleY + spacingY - spacingY / 2;
+        drawLine(
+          ctx,
+          spacingX,
+          lineY,
+          $scope.canvas.width / 2 - spacingX,
+          lineY,
+          lineColor
+        );
+        //#endregion
+
+        if (section.type == "array") {
+          let maxLine = 1;
+          let sectionRowsMaxline = {
+            0: 1,
+            1: 1
           }
+          let current_row = 1;
+          section.data.forEach(function (keycap, i) {
+            let img = new Image();
+            img.onload = function () {
+              let row = Math.floor(i / imagesPerRow);
+              let col = i % imagesPerRow;
 
-          ctx.font = "bold " + fontSize + "px Arial";
-          var titleWidth = ctx.measureText(section.title).width;
-          var titleX = ($scope.canvas.width - titleWidth) / 2 + textPadding;
-          let titleY =
-            startY +
-            (imageHeight + fontSize + spacingY) * rowCount +
-            sectionPadding * index;
-          // console.log(titleY)
-          ctx.fillStyle = textColor;
-          ctx.fillText(section.title, titleX, titleY);
+              if (row != current_row) {
+                current_row = row;
+                sectionRowsMaxline[index] = 1
+              }
 
-          let lineY = (fontSize - lineWidth) / 2;
-          drawLine(
+              let imageX = (spacingX + imageWidth) * col + spacingX;
+              let imageY =
+                titleY +
+                row * spacingY +
+                fontSize +
+                (fontSize * sectionRowsMaxline[index] - 1) * row +
+                textPadding +
+                row * (imageHeight + spacingY);
+
+              drawRoundedImage(
+                ctx,
+                img,
+                imageX,
+                imageY,
+                imageWidth,
+                imageHeight,
+                8
+              );
+
+              ctx.font = fontSize + "px Arial";
+              ctx.fillStyle = textColor;
+              let textWidth = ctx.measureText(keycap.name).width;
+              if (keycap.name) {
+                let line = wrapText(ctx, keycap.name, imageWidth, imageX, imageY + imageHeight + spacingY);
+                if (line > sectionRowsMaxline[i]) {
+                  sectionRowsMaxline[index] = line
+                }
+              }
+              // console.log("Section " + index + ": " + maxLine)
+              // ctx.fillText(
+              //   keycap.name ?? "",
+              //   imageX + (imageWidth - textWidth) / 2,
+              //   imageY + imageHeight + spacingY
+              // );
+
+              // End of line then update tempCanvasHeight
+              // if (i + 1 == imagesPerRow) {
+              //   console.log("hihih")
+              //   tempCanvasHeigh += (imageY + imageHeight + spacingY)
+              // }
+            };
+            img.src = keycap.img_url;
+          });
+        }
+
+        if (section.type == "text") {
+          ctx.font = fontSize + "px Arial";
+          let line = wrapText(
             ctx,
+            section.data,
+            $scope.canvas.width - 2 * spacingX,
             spacingX,
-            titleY - lineY,
-            titleX - spacingX,
-            titleY - lineY
+            titleY + fontSize + spacingY
           );
 
-          drawLine(
-            ctx,
-            ctx.measureText(section.title).width + titleX + spacingX,
-            titleY - lineY,
-            $scope.canvas.width - spacingX,
-            titleY - lineY
-          );
+          tempCanvasHeigh += titleY + fontSize + textPadding + (line + 1) * (20 + fontSize)
+        // $scope.canvas.height = tempCanvasHeigh
 
-          if (section.type == "array") {
-            // let maxLine = 1;
-            section.data.forEach(function (keycap, i) {
-              var img = new Image();
-              img.onload = function () {
-                var row = Math.floor(i / imagesPerRow);
-                var col = i % imagesPerRow;
-                var imageX = (imagePadding + imageWidth) * col + imagePadding;
-                var imageY =
-                  titleY +
-                  row * spacingY +
-                  fontSize +
-                  // (fontSize * maxLine - 1) * row +
-                  textPadding +
-                  row * (imageHeight + spacingY);
-                // console.log(imageY)
+        }
+      });
 
-                ctx.drawImage(img, imageX, imageY, imageWidth, imageHeight);
-
-                ctx.font = fontSize + "px Arial";
-                var textWidth = ctx.measureText(keycap.name).width;
-                // if (keycap.name) {
-                //   let line = wrapText(ctx, keycap.name, imageWidth, imageX, imageY + imageHeight + spacingY);
-                //   if (line > maxLine) {
-                //     maxLine = line
-                //   }
-                // }
-                // console.log("Section " + index + ": " + maxLine)
-                ctx.fillText(
-                  keycap.name ?? "",
-                  imageX + (imageWidth - textWidth) / 2,
-                  imageY + imageHeight + spacingY
-                );
-              };
-              img.src = keycap.img_url;
-            });
-          }
-
-          if (section.type == "text") {
-            ctx.font = fontSize + "px Arial";
-            let line = wrapText(
-              ctx,
-              section.data,
-              $scope.canvas.width - 2 * spacingX,
-              imagePadding,
-              titleY + fontSize + textPadding
-            );
-          }
-        });
-      };
 
       // // Set canvas background to white
       // ctx.fillStyle = $scope.setting.general.background_color;
@@ -205,7 +272,7 @@ app.controller(
         const metrics = context.measureText(testLine);
         const testWidth = metrics.width;
         if (testWidth > maxWidth && n > 0) {
-          context.fillText(line, x, y + lineHeight);
+          context.fillText(line, x + (maxWidth - context.measureText(line.trim()).width) / 2, y + lineHeight);
           line = words[n] + " ";
           lineHeight += 20; // 20px spacing between lines
           lines++;
@@ -215,43 +282,58 @@ app.controller(
       }
 
       lines++;
-      context.fillText(line, x, y + lineHeight);
+      context.fillText(line, x + (maxWidth - context.measureText(line.trim()).width) / 2, y + lineHeight);
       return lines;
     }
 
-    function drawLine(ctx, startX, startY, endX, endY) {
+    function drawRoundedImage(ctx, image, x, y, width, height, radius) {
+      ctx.save();
+      ctx.beginPath();
+      ctx.moveTo(x + radius, y);
+      ctx.lineTo(x + width - radius, y);
+      ctx.arcTo(x + width, y, x + width, y + radius, radius);
+      ctx.lineTo(x + width, y + height - radius);
+      ctx.arcTo(x + width, y + height, x + width - radius, y + height, radius);
+      ctx.lineTo(x + radius, y + height);
+      ctx.arcTo(x, y + height, x, y + height - radius, radius);
+      ctx.lineTo(x, y + radius);
+      ctx.arcTo(x, y, x + radius, y, radius);
+      ctx.closePath();
+      ctx.clip(); // Set the clipping region to the rounded area
+      ctx.drawImage(image, x, y, width, height); // Draw the image within the clipping region
+      ctx.restore();
+    }
+
+    function drawLine(ctx, startX, startY, endX, endY, color) {
       ctx.strokeStyle = "white";
       ctx.lineWidth = 2;
       ctx.beginPath();
       ctx.moveTo(startX, startY);
       ctx.lineTo(endX, endY);
+      ctx.strokeStyle = color;
       ctx.stroke();
     }
 
-    // function getMaxLine(array, itemPerRow, maxWidth) {
-    //   const words = text.split(' ');
-    //   let line = '';
-    //   for (let n = 0; n < words.length; n++) {
-    //     const testLine = line + words[n] + ' ';
-    //     const metrics = context.measureText(testLine);
-    //     const testWidth = metrics.width;
-    //     if (testWidth > maxWidth && n > 0) {
-    //         context.fillText(line, x, y + lineHeight);
-    //         line = words[n] + ' ';
-    //         lineHeight += 20; // 20px spacing between lines
-    //         lines++;
-    //     } else {
-    //         line = testLine;
-    //     }
-    //   }
-    // }
+    function getMaxItem() {
+      let maxItems = 0;
+      $scope.wishlist.forEach((section, index) => {
+        if (index != 2) {
+          let max = section.data.length;
+          if (max > maxItems) {
+            maxItems = max;
+          }
+        }
+      });
+
+      return maxItems;
+    }
 
     $scope.download = function () {
       // Convert canvas to image
-      var canvasDataUrl = $scope.canvas.toDataURL("image/png");
+      let canvasDataUrl = $scope.canvas.toDataURL("image/png");
 
       // Create a temporary anchor element to download the image
-      var link = document.createElement("a");
+      let link = document.createElement("a");
       link.download = "canvas_image.png";
       link.href = canvasDataUrl;
 
