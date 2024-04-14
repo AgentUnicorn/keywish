@@ -8,7 +8,7 @@ app.controller(
     $scope.canvas = null;
     const setting = WishlistService.getSetting();
 
-    function calulteCanvasWidth()
+    function preCalulteCanvasHeight()
     {
 
     }
@@ -41,6 +41,47 @@ app.controller(
       $scope.canvas = document.getElementById("myCanvas");
       let ctx = $scope.canvas.getContext("2d");
 
+      // Define constants for layout
+      let startX = 20; // X-coordinate of the starting position
+      let startY = 30; // Y-coordinate of the starting position
+      let imageSizeMultiply = 1.8;
+      let imageWidth = 100 * imageSizeMultiply; // Width of each image
+      let imageHeight = 100 * imageSizeMultiply; // Height of each image
+      let spacingX = 20; // Horizontal spacing between images
+      let spacingY = 20; // Vertical spacing between rows
+      let aspectRatio = 16/9;
+
+      // Title
+      let sectionColor = "#818CF8";
+      let titleFontSize = 24;
+      let sectionPadding = 50;
+
+      // Line
+      let lineWidth = 2;
+      let lineColor = "#f0abfc";
+
+      // Text
+      let fontSize = 16; // Font size for title and name
+      let textColor = "#FFFFFF";
+      let textPadding = 10; // Padding between text and images
+
+      // Calculate
+      let imagesPerRow = 5
+
+      // Precalculate
+      let preCalHeight = startY;
+      $scope.wishlist.forEach(function (section, i) {
+        preCalHeight += titleFontSize + sectionPadding + spacingY * 1.5;
+        if (section.type == "array") {
+          let numRows = Math.ceil(section.data.length / imagesPerRow)
+          preCalHeight += numRows * (imageHeight + spacingY + fontSize + textPadding)
+        }
+      })
+
+      let preCalWidth = Math.ceil(preCalHeight / aspectRatio)
+      $scope.canvas.width = preCalWidth
+      $scope.canvas.height = preCalHeight
+
       // Clear the canvas
       ctx.clearRect(0, 0, $scope.canvas.width, $scope.canvas.height);
 
@@ -58,32 +99,8 @@ app.controller(
       ctx.fillStyle = grad;
       ctx.fillRect(0, 0, $scope.canvas.width, $scope.canvas.height);
 
-      // Define constants for layout
-      let startX = 20; // X-coordinate of the starting position
-      let startY = 30; // Y-coordinate of the starting position
-      let imageSizeMultiply = 1.8;
-      let imageWidth = 100 * imageSizeMultiply; // Width of each image
-      let imageHeight = 100 * imageSizeMultiply; // Height of each image
-      let spacingX = 20; // Horizontal spacing between images
-      let spacingY = 20; // Vertical spacing between rows
-
-      // Title
-      let sectionColor = "#818CF8";
-      let titleFontSize = 24;
-      let sectionPadding = 50;
-
-      // Line
-      let lineWidth = 2;
-      let lineColor = "#f0abfc";
-
-      // Text
-      let fontSize = 16; // Font size for title and name
-      let textColor = "#FFFFFF";
-      let textPadding = 10; // Padding between text and images
-
-      // Calculate
       let maxItems = getMaxItem();
-      let imagesPerRow = calculateImagesPerRow(
+      imagesPerRow = calculateImagesPerRow(
         $scope.canvas.width,
         imageWidth,
         maxItems,
@@ -199,6 +216,7 @@ app.controller(
           let textArray = text.split(/^/gm)
           let numberOfLine = 0;
           textArray.forEach(function (line, i) {
+            let test = titleY + fontSize + spacingY * (numberOfLine + index);
             numberOfLine += wrapText(
               ctx,
               line,
