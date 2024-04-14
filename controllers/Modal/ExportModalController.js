@@ -72,9 +72,14 @@ app.controller(
       let preCalHeight = startY;
       $scope.wishlist.forEach(function (section, i) {
         preCalHeight += titleFontSize + sectionPadding + spacingY * 1.5;
-        if (section.type == "array") {
+        if (section.type == "array" && section.data.length > 0) {
           let numRows = Math.ceil(section.data.length / imagesPerRow)
-          preCalHeight += numRows * (imageHeight + spacingY + fontSize + textPadding)
+          preCalHeight += numRows * (imageHeight + fontSize + textPadding)
+        }
+        if (section.type == "text" && !isBlank(section.data)) {
+          let text = section.data;
+          let textArray = text.split(/^/gm)
+          preCalHeight += textArray.length * (fontSize + spacingY)
         }
       })
 
@@ -115,6 +120,10 @@ app.controller(
       let rowCount = 0;
       let tempCanvasHeigh = 0;
       $scope.wishlist.forEach(function (section, index) {
+        if (section.type == "text" && isBlank(section.data) || (section.type == "array" && section.data.length == 0)) {
+          return;
+        }
+        
         if (index > 0) {
           rowCount += Math.ceil(
             $scope.wishlist[index - 1].data.length / imagesPerRow
@@ -147,7 +156,7 @@ app.controller(
         );
         //#endregion
 
-        if (section.type == "array") {
+        if (section.type == "array" && section.data.length > 0) {
           let maxLine = 1;
           let sectionRowsMaxline = {
             0: 1,
@@ -210,13 +219,12 @@ app.controller(
           });
         }
 
-        if (section.type == "text") {
+        if (section.type == "text" && !isBlank(section.data)) {
           ctx.font = fontSize + "px Arial";
           let text = section.data;
           let textArray = text.split(/^/gm)
           let numberOfLine = 0;
           textArray.forEach(function (line, i) {
-            let test = titleY + fontSize + spacingY * (numberOfLine + index);
             numberOfLine += wrapText(
               ctx,
               line,
@@ -235,6 +243,10 @@ app.controller(
       // ctx.fillStyle = $scope.setting.general.background_color;
       // ctx.fillRect(0, 0, $scope.canvas.width, $scope.canvas.height);
     };
+
+    function isBlank(str) {
+      return (!str || /^\s*$/.test(str));
+  }
 
     function renderSections(sections, canvasWidth) {
       const imageWidth = 75;
