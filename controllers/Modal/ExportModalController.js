@@ -8,6 +8,11 @@ app.controller(
     $scope.canvas = null;
     const setting = WishlistService.getSetting();
 
+    function calulteCanvasWidth()
+    {
+
+    }
+
     function calculateImagesPerRow(
       canvasWidth,
       imageWidth,
@@ -40,6 +45,8 @@ app.controller(
       ctx.clearRect(0, 0, $scope.canvas.width, $scope.canvas.height);
 
       // Gradient background
+      // $scope.canvas.height = $scope.canvas.clientHeight
+      // $scope.canvas.width = $scope.canvas.clientWidth
       const centerX = $scope.canvas.width / 2;
       const centerY = $scope.canvas.height / 2;
       const grad = ctx.createRadialGradient(centerX, centerY, 0, centerX, centerY, $scope.canvas.width / 2);
@@ -103,7 +110,8 @@ app.controller(
         let titleY =
           startY +
           (imageHeight + titleFontSize + spacingY) * rowCount +
-          sectionPadding * index;
+          (sectionPadding * index);
+        titleY += spacingY * 1.5 * index;
         // tempCanvasHeigh = titleY;
         ctx.fillStyle = sectionColor;
         ctx.fillText(section.title, titleX, titleY);
@@ -177,8 +185,8 @@ app.controller(
 
               // End of line then update tempCanvasHeight
               // if (i + 1 == imagesPerRow) {
-              //   console.log("hihih")
               //   tempCanvasHeigh += (imageY + imageHeight + spacingY)
+              //   // console.log(tempCanvasHeigh)
               // }
             };
             img.src = keycap.img_url;
@@ -187,20 +195,23 @@ app.controller(
 
         if (section.type == "text") {
           ctx.font = fontSize + "px Arial";
-          let line = wrapText(
-            ctx,
-            section.data,
-            $scope.canvas.width - 2 * spacingX,
-            spacingX,
-            titleY + fontSize + spacingY
-          );
+          let text = section.data;
+          let textArray = text.split(/^/gm)
+          let numberOfLine = 0;
+          textArray.forEach(function (line, i) {
+            numberOfLine += wrapText(
+              ctx,
+              line,
+              $scope.canvas.width - 2 * spacingX,
+              spacingX,
+              titleY + fontSize + spacingY * (numberOfLine + index)
+            ) + 1
+          })
 
-          tempCanvasHeigh += titleY + fontSize + textPadding + (line + 1) * (20 + fontSize)
-        // $scope.canvas.height = tempCanvasHeigh
-
+          // tempCanvasHeigh += titleY + fontSize + textPadding + (line + 1) * (20 + fontSize)
+          // console.log('123');
         }
       });
-
 
       // // Set canvas background to white
       // ctx.fillStyle = $scope.setting.general.background_color;
