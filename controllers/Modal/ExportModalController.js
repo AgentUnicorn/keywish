@@ -8,6 +8,11 @@ app.controller(
     $scope.canvas = null;
     const setting = WishlistService.getSetting();
 
+    function preCalulteCanvasHeight()
+    {
+
+    }
+
     function calculateImagesPerRow(
       canvasWidth,
       imageWidth,
@@ -36,21 +41,6 @@ app.controller(
       $scope.canvas = document.getElementById("myCanvas");
       let ctx = $scope.canvas.getContext("2d");
 
-      // Clear the canvas
-      ctx.clearRect(0, 0, $scope.canvas.width, $scope.canvas.height);
-
-      // Gradient background
-      const centerX = $scope.canvas.width / 2;
-      const centerY = $scope.canvas.height / 2;
-      const grad = ctx.createRadialGradient(centerX, centerY, 0, centerX, centerY, $scope.canvas.width / 2);
-      grad.addColorStop(0, "#65538A");
-      grad.addColorStop(0.3, "#333150");
-      grad.addColorStop(1, "#121212");
-      
-      // Fill rectangle with gradient
-      ctx.fillStyle = grad;
-      ctx.fillRect(0, 0, $scope.canvas.width, $scope.canvas.height);
-
       // Define constants for layout
       let startX = 20; // X-coordinate of the starting position
       let startY = 30; // Y-coordinate of the starting position
@@ -59,6 +49,7 @@ app.controller(
       let imageHeight = 100 * imageSizeMultiply; // Height of each image
       let spacingX = 20; // Horizontal spacing between images
       let spacingY = 20; // Vertical spacing between rows
+      let aspectRatio = 16/9;
 
       // Title
       let sectionColor = "#818CF8";
@@ -75,8 +66,46 @@ app.controller(
       let textPadding = 10; // Padding between text and images
 
       // Calculate
+      let imagesPerRow = 5
+
+      // Precalculate
+      let preCalHeight = startY;
+      $scope.wishlist.forEach(function (section, i) {
+        preCalHeight += titleFontSize + sectionPadding + spacingY * 1.5;
+        if (section.type == "array" && section.data.length > 0) {
+          let numRows = Math.ceil(section.data.length / imagesPerRow)
+          preCalHeight += numRows * (imageHeight + fontSize + textPadding)
+        }
+        if (section.type == "text" && !isBlank(section.data)) {
+          let text = section.data;
+          let textArray = text.split(/^/gm)
+          preCalHeight += textArray.length * (fontSize + spacingY)
+        }
+      })
+
+      let preCalWidth = Math.ceil(preCalHeight / aspectRatio)
+      $scope.canvas.width = preCalWidth
+      $scope.canvas.height = preCalHeight
+
+      // Clear the canvas
+      ctx.clearRect(0, 0, $scope.canvas.width, $scope.canvas.height);
+
+      // Gradient background
+      // $scope.canvas.height = $scope.canvas.clientHeight
+      // $scope.canvas.width = $scope.canvas.clientWidth
+      const centerX = $scope.canvas.width / 2;
+      const centerY = $scope.canvas.height / 2;
+      const grad = ctx.createRadialGradient(centerX, centerY, 0, centerX, centerY, $scope.canvas.width / 2);
+      grad.addColorStop(0, "#65538A");
+      grad.addColorStop(0.3, "#333150");
+      grad.addColorStop(1, "#121212");
+      
+      // Fill rectangle with gradient
+      ctx.fillStyle = grad;
+      ctx.fillRect(0, 0, $scope.canvas.width, $scope.canvas.height);
+
       let maxItems = getMaxItem();
-      let imagesPerRow = calculateImagesPerRow(
+      imagesPerRow = calculateImagesPerRow(
         $scope.canvas.width,
         imageWidth,
         maxItems,
@@ -91,6 +120,10 @@ app.controller(
       let rowCount = 0;
       let tempCanvasHeigh = 0;
       $scope.wishlist.forEach(function (section, index) {
+        if (section.type == "text" && isBlank(section.data) || (section.type == "array" && section.data.length == 0)) {
+          return;
+        }
+        
         if (index > 0) {
           rowCount += Math.ceil(
             $scope.wishlist[index - 1].data.length / imagesPerRow
@@ -103,7 +136,8 @@ app.controller(
         let titleY =
           startY +
           (imageHeight + titleFontSize + spacingY) * rowCount +
-          sectionPadding * index;
+          (sectionPadding * index);
+        titleY += spacingY * 1.5 * index;
         // tempCanvasHeigh = titleY;
         ctx.fillStyle = sectionColor;
         ctx.fillText(section.title, titleX, titleY);
@@ -122,7 +156,7 @@ app.controller(
         );
         //#endregion
 
-        if (section.type == "array") {
+        if (section.type == "array" && section.data.length > 0) {
           let maxLine = 1;
           let sectionRowsMaxline = {
             0: 1,
@@ -177,35 +211,42 @@ app.controller(
 
               // End of line then update tempCanvasHeight
               // if (i + 1 == imagesPerRow) {
-              //   console.log("hihih")
               //   tempCanvasHeigh += (imageY + imageHeight + spacingY)
+              //   // console.log(tempCanvasHeigh)
               // }
             };
             img.src = keycap.img_url;
           });
         }
 
-        if (section.type == "text") {
+        if (section.type == "text" && !isBlank(section.data)) {
           ctx.font = fontSize + "px Arial";
-          let line = wrapText(
-            ctx,
-            section.data,
-            $scope.canvas.width - 2 * spacingX,
-            spacingX,
-            titleY + fontSize + spacingY
-          );
+          let text = section.data;
+          let textArray = text.split(/^/gm)
+          let numberOfLine = 0;
+          textArray.forEach(function (line, i) {
+            numberOfLine += wrapText(
+              ctx,
+              line,
+              $scope.canvas.width - 2 * spacingX,
+              spacingX,
+              titleY + fontSize + spacingY * (numberOfLine + index)
+            ) + 1
+          })
 
-          tempCanvasHeigh += titleY + fontSize + textPadding + (line + 1) * (20 + fontSize)
-        // $scope.canvas.height = tempCanvasHeigh
-
+          // tempCanvasHeigh += titleY + fontSize + textPadding + (line + 1) * (20 + fontSize)
+          // console.log('123');
         }
       });
-
 
       // // Set canvas background to white
       // ctx.fillStyle = $scope.setting.general.background_color;
       // ctx.fillRect(0, 0, $scope.canvas.width, $scope.canvas.height);
     };
+
+    function isBlank(str) {
+      return (!str || /^\s*$/.test(str));
+  }
 
     function renderSections(sections, canvasWidth) {
       const imageWidth = 75;
