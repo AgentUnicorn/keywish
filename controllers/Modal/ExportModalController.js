@@ -66,26 +66,26 @@ app.controller(
       let textPadding = 10; // Padding between text and images
 
       // Calculate
-      let imagesPerRow = 5
+      // let imagesPerRow = 5
 
       // Precalculate
-      let preCalHeight = startY;
-      $scope.wishlist.forEach(function (section, i) {
-        preCalHeight += titleFontSize + sectionPadding + spacingY * 1.5;
-        if (section.type == "array" && section.data.length > 0) {
-          let numRows = Math.ceil(section.data.length / imagesPerRow)
-          preCalHeight += numRows * (imageHeight + fontSize + textPadding)
-        }
-        if (section.type == "text" && !isBlank(section.data)) {
-          let text = section.data;
-          let textArray = text.split(/^/gm)
-          preCalHeight += textArray.length * (fontSize + spacingY)
-        }
-      })
+      // let preCalHeight = startY;
+      // $scope.wishlist.forEach(function (section, i) {
+      //   preCalHeight += titleFontSize + sectionPadding + spacingY * 1.5;
+      //   if (section.type == "array" && section.data.length > 0) {
+      //     let numRows = Math.ceil(section.data.length / imagesPerRow)
+      //     preCalHeight += numRows * (imageHeight + fontSize + textPadding)
+      //   }
+      //   if (section.type == "text" && !isBlank(section.data)) {
+      //     let text = section.data;
+      //     let textArray = text.split(/^/gm)
+      //     preCalHeight += textArray.length * (fontSize + spacingY)
+      //   }
+      // })
 
-      let preCalWidth = Math.ceil(preCalHeight / aspectRatio)
-      $scope.canvas.width = preCalWidth
-      $scope.canvas.height = preCalHeight
+      // let preCalWidth = Math.ceil(preCalHeight / aspectRatio)
+      // $scope.canvas.width = preCalWidth
+      // $scope.canvas.height = preCalHeight
 
       // Clear the canvas
       ctx.clearRect(0, 0, $scope.canvas.width, $scope.canvas.height);
