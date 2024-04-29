@@ -44,7 +44,7 @@ app.controller(
       // Define constants for layout
       let startX = 20; // X-coordinate of the starting position
       let startY = 30; // Y-coordinate of the starting position
-      let imageSizeMultiply = 2.5;
+      let imageSizeMultiply = 1.8;
       let imageWidth = 100 * imageSizeMultiply; // Width of each image
       let imageHeight = 100 * imageSizeMultiply; // Height of each image
       let spacingX = 20; // Horizontal spacing between images
