@@ -104,24 +104,26 @@ app.controller(
       ctx.fillStyle = grad;
       ctx.fillRect(0, 0, $scope.canvas.width, $scope.canvas.height);
 
-      let maxItems = getMaxItem();
-      // imagesPerRow = calculateImagesPerRow(
-      //   $scope.canvas.width,
-      //   imageWidth,
-      //   maxItems,
-      //   spacingX
-      // );
-      spacingX = recalculateSpacingX(
-        $scope.canvas.width,
-        imageWidth,
-        imagesPerRow
-      );
-
       let rowCount = 0;
       let tempCanvasHeigh = 0;
       $scope.wishlist.forEach(function (section, index) {
         if (section.type == "text" && isBlank(section.data) || (section.type == "array" && section.data.length == 0)) {
           return;
+        }
+
+        if (section.type == "array" && section.data.length > 4) {
+          let maxItems = getMaxItem();
+          imagesPerRow = calculateImagesPerRow(
+            $scope.canvas.width,
+            imageWidth,
+            maxItems,
+            spacingX
+          );
+          spacingX = recalculateSpacingX(
+            $scope.canvas.width,
+            imageWidth,
+            imagesPerRow
+          );
         }
         
         if (index > 0) {
