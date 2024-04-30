@@ -54,7 +54,7 @@ app.controller(
       // Title
       let sectionColor = "#818CF8";
       let titleFontSize = 24;
-      let sectionPadding = 50;
+      let sectionPadding = 100;
 
       // Line
       let lineWidth = 2;
@@ -177,6 +177,7 @@ app.controller(
               let imageX = (spacingX + imageWidth) * col + spacingX;
               let imageY =
                 titleY +
+                (1.5) * spacingY +
                 row * spacingY +
                 fontSize +
                 (fontSize * sectionRowsMaxline[index] - 1) * row +
