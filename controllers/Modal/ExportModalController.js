@@ -43,7 +43,7 @@ app.controller(
 
       // Define constants for layout
       let startX = 20; // X-coordinate of the starting position
-      let startY = 30; // Y-coordinate of the starting position
+      let startY = 70; // Y-coordinate of the starting position
       let imageSizeMultiply = 2.5;
       let imageWidth = 100 * imageSizeMultiply; // Width of each image
       let imageHeight = 100 * imageSizeMultiply; // Height of each image
@@ -105,12 +105,12 @@ app.controller(
       ctx.fillRect(0, 0, $scope.canvas.width, $scope.canvas.height);
 
       let maxItems = getMaxItem();
-      imagesPerRow = calculateImagesPerRow(
-        $scope.canvas.width,
-        imageWidth,
-        maxItems,
-        spacingX
-      );
+      // imagesPerRow = calculateImagesPerRow(
+      //   $scope.canvas.width,
+      //   imageWidth,
+      //   maxItems,
+      //   spacingX
+      // );
       spacingX = recalculateSpacingX(
         $scope.canvas.width,
         imageWidth,
