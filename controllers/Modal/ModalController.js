@@ -57,6 +57,7 @@ app.controller(
     };
 
     $scope.save = function () {
+      $scope.keycap.img_url = $scope.myCroppedImage;
       WishlistService.editKeycap($scope.wishlist, $scope.section_id, $scope.keycap);
       $uibModalInstance.close($scope.wishlist);
     };
