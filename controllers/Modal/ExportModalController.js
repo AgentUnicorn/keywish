@@ -111,20 +111,30 @@ app.controller(
           return;
         }
 
-        if (section.type == "array" && section.data.length > 4) {
-          let maxItems = getMaxItem();
-          imagesPerRow = calculateImagesPerRow(
-            $scope.canvas.width,
-            imageWidth,
-            maxItems,
-            spacingX
-          );
-          spacingX = recalculateSpacingX(
-            $scope.canvas.width,
-            imageWidth,
-            imagesPerRow
-          );
-        }
+        // Auto calculate max item per row and spacing between
+        // if (section.type == "array" && section.data.length > 4) {
+        //   let maxItems = getMaxItem();
+        //   imagesPerRow = calculateImagesPerRow(
+        //     $scope.canvas.width,
+        //     imageWidth,
+        //     maxItems,
+        //     spacingX
+        //   );
+        //   spacingX = recalculateSpacingX(
+        //     $scope.canvas.width,
+        //     imageWidth,
+        //     imagesPerRow
+        //   );
+        // }
+
+        // Hard code
+        imagesPerRow = 5;
+        spacingX = recalculateSpacingX(
+          $scope.canvas.width,
+          imageWidth,
+          imagesPerRow
+        );
+
         
         if (index > 0) {
           rowCount += Math.ceil(
